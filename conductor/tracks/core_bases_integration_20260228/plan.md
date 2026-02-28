@@ -1,6 +1,6 @@
 # Implementation Plan: Implement core Task Manager integration with Obsidian Bases
 
-## Phase 1: Heading Extraction and Hierarchy Mapping
+## Phase 1: Heading Extraction and Hierarchy Mapping [checkpoint: 28be8af]
 This phase implements the logic to extract headings and their hierarchical context from Markdown files.
 
 - [x] Task: Define TypeScript interfaces for heading-based task records [6650dc0]
