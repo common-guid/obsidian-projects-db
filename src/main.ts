@@ -1,6 +1,9 @@
 import { Plugin, BasesView } from 'obsidian';
+import React from 'react';
+import { createRoot, Root } from 'react-dom/client';
 import { mapHeadingsToTasks } from './mapper';
 import { HeadingTask } from './types';
+import { TaskTable } from './components/TaskTable';
 
 export const ExampleViewType = 'task-table';
 
@@ -34,6 +37,7 @@ export default class TaskManagerPlugin extends Plugin {
 export class TaskBasesView extends BasesView {
   readonly type = ExampleViewType;
   private containerEl: HTMLElement;
+  private root: Root | null = null;
 
   constructor(controller: any, parentEl: HTMLElement) {
     super(controller);
@@ -41,9 +45,24 @@ export class TaskBasesView extends BasesView {
   }
 
   public onDataUpdated(): void {
-    this.containerEl.empty();
     const flattenedTasks = this.flattenData();
-    this.containerEl.createDiv({ text: `Task Manager Hub (${flattenedTasks.length} tasks)` });
+    
+    if (!this.root) {
+      this.root = createRoot(this.containerEl);
+    }
+
+    const handleOpenLink = (file: string, heading: string) => {
+      const { app } = this;
+      const path = file + (heading ? '#' + heading : '');
+      void app.workspace.openLinkText(path, '', false);
+    };
+
+    this.root.render(
+      React.createElement(TaskTable, { 
+        tasks: flattenedTasks,
+        onOpenLink: handleOpenLink
+      })
+    );
   }
 
   protected flattenData(): HeadingTask[] {

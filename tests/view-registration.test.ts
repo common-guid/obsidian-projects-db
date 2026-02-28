@@ -1,5 +1,13 @@
 import { describe, it, expect, vi } from 'vitest';
+
+vi.mock('react-dom/client', () => ({
+  createRoot: vi.fn().mockReturnValue({
+    render: vi.fn()
+  })
+}));
+
 import TaskManagerPlugin, { TaskBasesView, ExampleViewType } from '../src/main';
+import { createRoot } from 'react-dom/client';
 
 describe('TaskManagerPlugin', () => {
   it('should register the Bases view on load', async () => {
@@ -61,8 +69,6 @@ describe('TaskBasesView', () => {
     };
 
     // This is where we'll test the flattening logic. 
-    // We'll expose it as a protected method or just test its side effect.
-    // For now, let's assume onDataUpdated calls a method that we can spy on.
     const spy = vi.spyOn(view as any, 'flattenData');
     view.onDataUpdated();
     

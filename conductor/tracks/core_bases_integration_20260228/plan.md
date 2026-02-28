@@ -25,12 +25,12 @@ This phase focuses on registering the custom view within the Obsidian Bases ecos
 ## Phase 3: Task Table UI Rendering
 This phase implements the specific table rendering logic for the Task Manager.
 
-- [ ] Task: Create the React-based table component for headings
-    - [ ] Define the table structure with columns: `file`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`
-    - [ ] Implement conditional rendering to highlight the "current" heading level in each row
-- [ ] Task: Implement interactive features for headings
-    - [ ] Add links to the source file and specific heading (using Obsidian URI or `openLinkText`)
-    - [ ] Ensure hover previews work for the source file
+- [x] Task: Create the React-based table component for headings [3854837]
+    - [x] Define the table structure with columns: `file`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`
+    - [x] Implement conditional rendering to highlight the "current" heading level in each row
+- [x] Task: Implement interactive features for headings [3854837]
+    - [x] Add links to the source file and specific heading (using Obsidian URI or `openLinkText`)
+    - [x] Ensure hover previews work for the source file
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Task Table UI Rendering' (Protocol in workflow.md)
 
 ## Phase 4: Final Validation and Edge Case Handling
