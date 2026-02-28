@@ -8,8 +8,19 @@ export class Component {
   removeChild() {}
 }
 
-// Global mocks for Bases
-(global as any).BasesView = class {
+export class BasesView {
+  app: any;
+  data: any;
   constructor(public controller: any) {}
-  createDiv() {}
+}
+
+(global as any).BasesView = BasesView;
+
+(global as any).document = {
+  createElement: () => ({
+    createDiv: () => ({
+      empty: () => {},
+      createDiv: () => {}
+    })
+  })
 };

@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "vitest run"
+    "test": "vitest run",
+    "build": "esbuild src/main.ts --bundle --external:obsidian --format=cjs --target=es2018 --outfile=main.js",
+    "dev": "esbuild src/main.ts --bundle --external:obsidian --format=cjs --target=es2018 --watch --outfile=main.js"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +14,8 @@
   "devDependencies": {
     "@types/node": "^25.3.2",
     "@vitest/coverage-v8": "^4.0.18",
+    "esbuild": "^0.27.3",
+    "obsidian": "^1.12.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"

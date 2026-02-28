@@ -9,17 +9,17 @@ This phase implements the logic to extract headings and their hierarchical conte
 - [x] Task: Implement heading extraction logic [c86b5c7]
     - [ ] Write failing unit tests for mapping a list of Obsidian `HeadingCache` objects to `HeadingTask` records
     - [ ] Implement the mapper logic to correctly populate `h1-h6` columns based on the current heading's level and its preceding parents
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Heading Extraction and Hierarchy Mapping' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Heading Extraction and Hierarchy Mapping' (Protocol in workflow.md) [28be8af]
 
 ## Phase 2: Custom Bases View Registration
 This phase focuses on registering the custom view within the Obsidian Bases ecosystem.
 
-- [ ] Task: Implement the "Task Table" layout registration
-    - [ ] Register the `task-table` view type in the plugin's `onload` function
-    - [ ] Create the `TaskBasesView` class extending `BasesView`
-- [ ] Task: Implement data flattening in the view
-    - [ ] Implement the `onDataUpdated` method to process `this.data`
-    - [ ] Write logic to transform the list of `BasesEntry` (files) into a flattened list of `HeadingTask` records
+- [x] Task: Implement the "Task Table" layout registration [3bb648d]
+    - [x] Register the `task-table` view type in the plugin's `onload` function
+    - [x] Create the `TaskBasesView` class extending `BasesView`
+- [x] Task: Implement data flattening in the view [3bb648d]
+    - [x] Implement the `onDataUpdated` method to process `this.data`
+    - [x] Write logic to transform the list of `BasesEntry` (files) into a flattened list of `HeadingTask` records
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Custom Bases View Registration' (Protocol in workflow.md)
 
 ## Phase 3: Task Table UI Rendering

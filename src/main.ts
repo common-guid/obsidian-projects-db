@@ -1,25 +1,36 @@
-import { Plugin } from 'obsidian';
+import { Plugin, BasesView } from 'obsidian';
 import { mapHeadingsToTasks } from './mapper';
 import { HeadingTask } from './types';
 
-// Note: These types might not be in the standard obsidian.d.ts if it's an old version
-// but we'll define them as needed for now.
 export const ExampleViewType = 'task-table';
 
 export default class TaskManagerPlugin extends Plugin {
   async onload() {
-    // @ts-ignore - registerBasesView is provided by the Bases core plugin
-    this.registerBasesView(ExampleViewType, {
-      name: 'Task Table',
-      icon: 'lucide-table',
-      factory: (controller: any, containerEl: HTMLElement) => {
-        return new TaskBasesView(controller, containerEl);
-      },
-    });
+    console.log('Task Manager Plugin loading...');
+    
+    // @ts-ignore
+    if (!this.registerBasesView) {
+      console.error('registerBasesView not found on Plugin instance');
+    } else {
+      console.log('registerBasesView found!');
+    }
+
+    try {
+      // @ts-ignore
+      this.registerBasesView(ExampleViewType, {
+        name: 'Task Table',
+        icon: 'lucide-table',
+        factory: (controller: any, containerEl: HTMLElement) => {
+          return new TaskBasesView(controller, containerEl);
+        },
+      });
+      console.log('Task Table view registered successfully');
+    } catch (e) {
+      console.error('Failed to register Bases view:', e);
+    }
   }
 }
 
-// @ts-ignore - BasesView is provided by the Bases core plugin
 export class TaskBasesView extends BasesView {
   readonly type = ExampleViewType;
   private containerEl: HTMLElement;
