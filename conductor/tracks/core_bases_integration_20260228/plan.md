@@ -22,7 +22,7 @@ This phase focuses on registering the custom view within the Obsidian Bases ecos
     - [x] Write logic to transform the list of `BasesEntry` (files) into a flattened list of `HeadingTask` records
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Custom Bases View Registration' (Protocol in workflow.md) [b91bf4a]
 
-## Phase 3: Task Table UI Rendering
+## Phase 3: Task Table UI Rendering [checkpoint: 14c592f]
 This phase implements the specific table rendering logic for the Task Manager.
 
 - [x] Task: Create the React-based table component for headings [3854837]
@@ -31,7 +31,7 @@ This phase implements the specific table rendering logic for the Task Manager.
 - [x] Task: Implement interactive features for headings [3854837]
     - [x] Add links to the source file and specific heading (using Obsidian URI or `openLinkText`)
     - [x] Ensure hover previews work for the source file
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Task Table UI Rendering' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Task Table UI Rendering' (Protocol in workflow.md) [14c592f]
 
 ## Phase 4: Final Validation and Edge Case Handling
 This phase focuses on ensuring the system handles complex documents correctly.
