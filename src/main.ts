@@ -7,7 +7,7 @@ import { TaskTable } from './components/TaskTable';
 
 export const ExampleViewType = 'task-table';
 
-export default class TaskManagerPlugin extends Plugin {
+export class TaskManagerPlugin extends Plugin {
   async onload() {
     console.log('Task Manager Plugin loading...');
     
@@ -44,7 +44,7 @@ export class TaskBasesView extends BasesView {
     this.containerEl = parentEl.createDiv('task-manager-view-container');
   }
 
-  public onDataUpdated(): void {
+  onDataUpdated(): void {
     const flattenedTasks = this.flattenData();
     
     if (!this.root) {

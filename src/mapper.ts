@@ -1,6 +1,7 @@
+import { HeadingCache } from 'obsidian';
 import { HeadingTask } from './types';
 
-export function mapHeadingsToTasks(fileName: string, headings: any[]): HeadingTask[] {
+export function mapHeadingsToTasks(fileName: string, headings: HeadingCache[]): HeadingTask[] {
   const tasks: HeadingTask[] = [];
   const currentPath: (string | null)[] = [null, null, null, null, null, null, null]; // index 1-6
 

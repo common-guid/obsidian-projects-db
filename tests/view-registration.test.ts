@@ -6,7 +6,7 @@ vi.mock('react-dom/client', () => ({
   })
 }));
 
-import TaskManagerPlugin, { TaskBasesView, ExampleViewType } from '../src/main';
+import { TaskManagerPlugin, TaskBasesView, ExampleViewType } from '../src/main';
 import { createRoot } from 'react-dom/client';
 
 describe('TaskManagerPlugin', () => {
