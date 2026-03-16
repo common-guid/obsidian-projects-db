@@ -1,6 +1,10 @@
 export class Plugin {
+  app: any;
+  constructor(app: any, _manifest: any) {
+    this.app = app;
+  }
   onload() {}
-  registerBasesView() {}
+  registerBasesView(_viewId: string, _registration: any): boolean { return true; }
 }
 
 export class Component {

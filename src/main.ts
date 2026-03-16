@@ -7,30 +7,34 @@ import { TaskTable } from './components/TaskTable';
 
 export const ExampleViewType = 'task-table';
 
-export class TaskManagerPlugin extends Plugin {
+export default class TaskManagerPlugin extends Plugin {
   async onload() {
     console.log('Task Manager Plugin loading...');
-    
-    // @ts-ignore
-    if (!this.registerBasesView) {
-      console.error('registerBasesView not found on Plugin instance');
-    } else {
-      console.log('registerBasesView found!');
+
+    const registered = this.registerBasesView(ExampleViewType, {
+      name: 'Task Table',
+      icon: 'lucide-table',
+      factory: (controller, containerEl) => {
+        return new TaskBasesView(controller, containerEl);
+      },
+    });
+
+    if (!registered) {
+      console.warn('Task Manager: registerBasesView returned false — Bases may not be enabled in this vault.');
+      return;
     }
 
-    try {
-      // @ts-ignore
-      this.registerBasesView(ExampleViewType, {
-        name: 'Task Table',
-        icon: 'lucide-table',
-        factory: (controller: any, containerEl: HTMLElement) => {
-          return new TaskBasesView(controller, containerEl);
-        },
+    console.log('Task Table view registered successfully.');
+
+    // Obsidian's deferred-view system can render the active .base tab before
+    // a community plugin's onload completes (startup race condition).  After
+    // the workspace layout is fully ready, force every open Bases leaf to
+    // re-apply its state so that it picks up the now-registered view type.
+    this.app.workspace.onLayoutReady(() => {
+      this.app.workspace.getLeavesOfType('bases').forEach((leaf: any) => {
+        leaf.setViewState(leaf.getViewState());
       });
-      console.log('Task Table view registered successfully');
-    } catch (e) {
-      console.error('Failed to register Bases view:', e);
-    }
+    });
   }
 }
 
