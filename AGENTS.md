@@ -14,3 +14,7 @@
 6. **References:**
     - see the `dev-docs/` directory for obsidian developer documentation
     - see the `user-help/` directory for obsidian user documentation
+7. **Testing:**
+    - use the `test-vault/` directory to test the `main.js` file produced by `npm run build`.
+    - load the `test-vault/` directory into obsidian and test the functionality of the plugin.
+    - ensure that the plugin loads without error.

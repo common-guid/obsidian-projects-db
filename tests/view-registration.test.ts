@@ -6,25 +6,56 @@ vi.mock('react-dom/client', () => ({
   })
 }));
 
-import { TaskManagerPlugin, TaskBasesView, ExampleViewType } from '../src/main';
+import TaskManagerPlugin, { TaskBasesView, ExampleViewType } from '../src/main';
 import { createRoot } from 'react-dom/client';
 
 describe('TaskManagerPlugin', () => {
   it('should register the Bases view on load', async () => {
+    const mockOnLayoutReady = vi.fn();
+    const mockGetLeavesOfType = vi.fn().mockReturnValue([]);
+    const mockApp = {
+      workspace: {
+        onLayoutReady: mockOnLayoutReady,
+        getLeavesOfType: mockGetLeavesOfType,
+      },
+    };
+
     // @ts-ignore
-    const plugin = new TaskManagerPlugin({} as any, {} as any);
-    const spy = vi.spyOn(plugin as any, 'registerBasesView');
-    
+    const plugin = new TaskManagerPlugin(mockApp as any, {} as any);
+    const spy = vi.spyOn(plugin as any, 'registerBasesView').mockReturnValue(true);
+
     await plugin.onload();
-    
+
     expect(spy).toHaveBeenCalledWith(ExampleViewType, expect.objectContaining({
       name: 'Task Table'
     }));
+
+    // onLayoutReady should be scheduled to refresh open Bases leaves
+    expect(mockOnLayoutReady).toHaveBeenCalled();
+
+    // Simulate the layout-ready callback firing
+    const layoutReadyCallback = mockOnLayoutReady.mock.calls[0][0] as () => void;
+    const mockLeaf = { getViewState: vi.fn().mockReturnValue({ type: 'bases', state: {} }), setViewState: vi.fn() };
+    mockGetLeavesOfType.mockReturnValue([mockLeaf]);
+    layoutReadyCallback();
+    expect(mockLeaf.setViewState).toHaveBeenCalledWith(mockLeaf.getViewState());
 
     // Test the factory
     const factory = (spy.mock.calls[0][1] as any).factory;
     const view = factory({}, document.createElement('div'));
     expect(view).toBeInstanceOf(TaskBasesView);
+  });
+
+  it('should warn and return early if Bases is not enabled', async () => {
+    const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    // @ts-ignore
+    const plugin = new TaskManagerPlugin({} as any, {} as any);
+    vi.spyOn(plugin as any, 'registerBasesView').mockReturnValue(false);
+
+    await plugin.onload();
+
+    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Bases may not be enabled'));
+    consoleSpy.mockRestore();
   });
 });
 
@@ -50,9 +81,10 @@ describe('TaskBasesView', () => {
       metadataCache: {
         getFileCache: vi.fn().mockReturnValue({
           headings: [
-            { heading: 'Task 1', level: 1 },
-            { heading: 'Task 2', level: 2 },
-          ]
+            { heading: 'Task 1', level: 1, position: { start: { line: 0 } } },
+            { heading: 'Task 2', level: 2, position: { start: { line: 5 } } },
+          ],
+          tags: []
         })
       }
     };
@@ -75,8 +107,8 @@ describe('TaskBasesView', () => {
     expect(spy).toHaveBeenCalled();
     const result = spy.mock.results[0].value;
     expect(result).toHaveLength(2);
-    expect(result[0].h1).toBe('Task 1');
-    expect(result[1].h2).toBe('Task 2');
+    expect(result[0].h1.text).toBe('Task 1');
+    expect(result[1].h2.text).toBe('Task 2');
   });
 
   it('should return empty array if data is missing', () => {
