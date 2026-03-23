@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { HeadingTask, HeadingLevel } from '../types';
 
 interface TaskTableProps {
@@ -26,11 +26,33 @@ const FileIcon: React.FC = () => (
   </svg>
 );
 
+const Chevron: React.FC<{ isCollapsed: boolean, onClick: (e: React.MouseEvent) => void }> = ({ isCollapsed, onClick }) => (
+  <button className="toggle-button" onClick={onClick}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`chevron-icon ${isCollapsed ? 'collapsed' : ''}`}
+    >
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  </button>
+);
+
 const TagPill: React.FC<{ tag: string }> = ({ tag }) => (
   <span className="tag-pill">{tag}</span>
 );
 
-const TaskRow = React.memo(({ task, onOpenLink }: { task: HeadingTask, onOpenLink?: (file: string, heading: string) => void }) => {
+const TaskRow = React.memo(({ task, onOpenLink, isCollapsed, onToggle }: { 
+  task: HeadingTask, 
+  onOpenLink?: (file: string, heading: string) => void,
+  isCollapsed: boolean,
+  onToggle: (id: string) => void
+}) => {
   const handleLinkClick = (file: string, heading: string) => {
     if (onOpenLink) {
       onOpenLink(file, heading);
@@ -44,14 +66,26 @@ const TaskRow = React.memo(({ task, onOpenLink }: { task: HeadingTask, onOpenLin
     return (
       <td
         className={isActive ? 'current-level link' : ''}
-        onClick={() => isActive && handleLinkClick(task.file, value.text || '')}
+        onClick={(e) => {
+          // Prevent opening link if clicking the toggle button
+          if ((e.target as HTMLElement).closest('.toggle-button')) return;
+          if (isActive) handleLinkClick(task.file, value.text || '');
+        }}
       >
         <div className="cell-content">
-          {isActive ? (
-            <span className="level-pill">{value.text}</span>
-          ) : (
-            <span className="heading-text">{value.text}</span>
-          )}
+          <div className="title-row">
+            {isActive && task.hasChildren && (
+              <Chevron isCollapsed={isCollapsed} onClick={(e) => {
+                e.stopPropagation();
+                onToggle(task.id);
+              }} />
+            )}
+            {isActive ? (
+              <span className="level-pill">{value.text}</span>
+            ) : (
+              <span className="heading-text">{value.text}</span>
+            )}
+          </div>
           {value.tags.length > 0 && (
             <div className="tag-container">
               {value.tags.map((tag, idx) => (
@@ -87,6 +121,34 @@ const TaskRow = React.memo(({ task, onOpenLink }: { task: HeadingTask, onOpenLin
 });
 
 export const TaskTable: React.FC<TaskTableProps> = ({ tasks, onOpenLink }) => {
+  const [collapsedIds, setCollapsedIds] = useState<Set<string>>(new Set());
+
+  const handleToggle = (id: string) => {
+    setCollapsedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
+
+  const filteredTasks = useMemo(() => {
+    return tasks.filter(task => {
+      // Check if any of its parents are collapsed
+      // Parents are h1...h_{level-1}
+      for (let i = 1; i < task.level; i++) {
+        const parent = (task as any)[`h${i}`] as HeadingLevel;
+        if (parent && parent.id && collapsedIds.has(parent.id)) {
+          return false;
+        }
+      }
+      return true;
+    });
+  }, [tasks, collapsedIds]);
+
   return (
     <table className="task-manager-table">
       <thead>
@@ -101,8 +163,14 @@ export const TaskTable: React.FC<TaskTableProps> = ({ tasks, onOpenLink }) => {
         </tr>
       </thead>
       <tbody>
-        {tasks.map((task, index) => (
-          <TaskRow key={`${task.file}-${task.level}-${task.text}-${index}`} task={task} onOpenLink={onOpenLink} />
+        {filteredTasks.map((task, index) => (
+          <TaskRow 
+            key={`${task.file}-${task.level}-${task.text}-${index}`} 
+            task={task} 
+            onOpenLink={onOpenLink}
+            isCollapsed={collapsedIds.has(task.id)}
+            onToggle={handleToggle}
+          />
         ))}
       </tbody>
     </table>

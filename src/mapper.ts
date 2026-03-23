@@ -53,13 +53,13 @@ export function mapHeadingsToTasks(
 ): HeadingTask[] {
   const tasks: HeadingTask[] = [];
   const currentPath: HeadingLevel[] = [
-    { text: null, tags: [] }, // level 0 unused
-    { text: null, tags: [] }, 
-    { text: null, tags: [] }, 
-    { text: null, tags: [] }, 
-    { text: null, tags: [] }, 
-    { text: null, tags: [] }, 
-    { text: null, tags: [] }
+    { id: null, text: null, tags: [] }, // level 0 unused
+    { id: null, text: null, tags: [] }, 
+    { id: null, text: null, tags: [] }, 
+    { id: null, text: null, tags: [] }, 
+    { id: null, text: null, tags: [] }, 
+    { id: null, text: null, tags: [] }, 
+    { id: null, text: null, tags: [] }
   ];
 
   for (let i = 0; i < headings.length; i++) {
@@ -68,14 +68,26 @@ export function mapHeadingsToTasks(
     
     const { text: cleanText } = extractTagsFromText(headingCache.heading);
     const combinedTags = getTagsForHeading(i, headings, tags);
+    
+    // Assign a unique ID to this heading
+    const headingId = `${fileName}:${i}`;
 
     // Update the path: set the current level and clear all deeper levels
-    currentPath[level] = { text: cleanText, tags: combinedTags };
+    currentPath[level] = { id: headingId, text: cleanText, tags: combinedTags };
     for (let j = level + 1; j <= 6; j++) {
-      currentPath[j] = { text: null, tags: [] };
+      currentPath[j] = { id: null, text: null, tags: [] };
+    }
+
+    // A heading has children if the next heading in the file has a higher level
+    let hasChildren = false;
+    if (i < headings.length - 1) {
+      if (headings[i + 1].level > level) {
+        hasChildren = true;
+      }
     }
 
     const task: HeadingTask = {
+      id: headingId,
       file: fileName,
       h1: { ...currentPath[1] },
       h2: { ...currentPath[2] },
@@ -85,7 +97,8 @@ export function mapHeadingsToTasks(
       h6: { ...currentPath[6] },
       level: level,
       text: cleanText,
-      tags: combinedTags
+      tags: combinedTags,
+      hasChildren
     };
 
     tasks.push(task);

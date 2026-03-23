@@ -21474,7 +21474,22 @@
     /* @__PURE__ */ import_react.default.createElement("line", { x1: "16", y1: "17", x2: "8", y2: "17" }),
     /* @__PURE__ */ import_react.default.createElement("polyline", { points: "10 9 9 9 8 9" })
   );
-  var TaskRow = import_react.default.memo(({ task, onOpenLink }) => {
+  var Chevron = ({ isCollapsed, onClick }) => /* @__PURE__ */ import_react.default.createElement("button", { className: "toggle-button", onClick }, /* @__PURE__ */ import_react.default.createElement(
+    "svg",
+    {
+      xmlns: "http://www.w3.org/2000/svg",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      className: `chevron-icon ${isCollapsed ? "collapsed" : ""}`
+    },
+    /* @__PURE__ */ import_react.default.createElement("polyline", { points: "6 9 12 15 18 9" })
+  ));
+  var TagPill = ({ tag }) => /* @__PURE__ */ import_react.default.createElement("span", { className: "tag-pill" }, tag);
+  var TaskRow = import_react.default.memo(({ task, onOpenLink, isCollapsed, onToggle }) => {
     const handleLinkClick = (file, heading) => {
       if (onOpenLink) {
         onOpenLink(file, heading);
@@ -21482,63 +21497,136 @@
     };
     const renderCell = (level, value) => {
       const isActive = task.level === level;
+      if (!value.text && value.tags.length === 0) return /* @__PURE__ */ import_react.default.createElement("td", null);
       return /* @__PURE__ */ import_react.default.createElement(
         "td",
         {
           className: isActive ? "current-level link" : "",
-          onClick: () => isActive && handleLinkClick(task.file, value || "")
+          onClick: (e) => {
+            if (e.target.closest(".toggle-button")) return;
+            if (isActive) handleLinkClick(task.file, value.text || "");
+          }
         },
-        isActive && value ? /* @__PURE__ */ import_react.default.createElement("span", { className: "level-pill" }, value) : value
+        /* @__PURE__ */ import_react.default.createElement("div", { className: "cell-content" }, /* @__PURE__ */ import_react.default.createElement("div", { className: "title-row" }, isActive && task.hasChildren && /* @__PURE__ */ import_react.default.createElement(Chevron, { isCollapsed, onClick: (e) => {
+          e.stopPropagation();
+          onToggle(task.id);
+        } }), isActive ? /* @__PURE__ */ import_react.default.createElement("span", { className: "level-pill" }, value.text) : /* @__PURE__ */ import_react.default.createElement("span", { className: "heading-text" }, value.text)), value.tags.length > 0 && /* @__PURE__ */ import_react.default.createElement("div", { className: "tag-container" }, value.tags.map((tag, idx) => isActive ? /* @__PURE__ */ import_react.default.createElement(TagPill, { key: idx, tag }) : /* @__PURE__ */ import_react.default.createElement("span", { key: idx, className: "heading-tag" }, tag))))
       );
     };
     return /* @__PURE__ */ import_react.default.createElement("tr", null, /* @__PURE__ */ import_react.default.createElement("td", { className: "link", onClick: () => handleLinkClick(task.file, "") }, /* @__PURE__ */ import_react.default.createElement("span", { className: "file-icon-wrapper" }, /* @__PURE__ */ import_react.default.createElement(FileIcon, null), task.file)), renderCell(1, task.h1), renderCell(2, task.h2), renderCell(3, task.h3), renderCell(4, task.h4), renderCell(5, task.h5), renderCell(6, task.h6));
   });
   var TaskTable = ({ tasks, onOpenLink }) => {
-    return /* @__PURE__ */ import_react.default.createElement("table", { className: "task-manager-table" }, /* @__PURE__ */ import_react.default.createElement("thead", null, /* @__PURE__ */ import_react.default.createElement("tr", null, /* @__PURE__ */ import_react.default.createElement("th", null, "file"), /* @__PURE__ */ import_react.default.createElement("th", null, "h1"), /* @__PURE__ */ import_react.default.createElement("th", null, "h2"), /* @__PURE__ */ import_react.default.createElement("th", null, "h3"), /* @__PURE__ */ import_react.default.createElement("th", null, "h4"), /* @__PURE__ */ import_react.default.createElement("th", null, "h5"), /* @__PURE__ */ import_react.default.createElement("th", null, "h6"))), /* @__PURE__ */ import_react.default.createElement("tbody", null, tasks.map((task, index) => /* @__PURE__ */ import_react.default.createElement(TaskRow, { key: `${task.file}-${task.level}-${task.text}-${index}`, task, onOpenLink }))));
+    const [collapsedIds, setCollapsedIds] = (0, import_react.useState)(/* @__PURE__ */ new Set());
+    const handleToggle = (id) => {
+      setCollapsedIds((prev) => {
+        const next = new Set(prev);
+        if (next.has(id)) {
+          next.delete(id);
+        } else {
+          next.add(id);
+        }
+        return next;
+      });
+    };
+    const filteredTasks = (0, import_react.useMemo)(() => {
+      return tasks.filter((task) => {
+        for (let i = 1; i < task.level; i++) {
+          const parent = task[`h${i}`];
+          if (parent && parent.id && collapsedIds.has(parent.id)) {
+            return false;
+          }
+        }
+        return true;
+      });
+    }, [tasks, collapsedIds]);
+    return /* @__PURE__ */ import_react.default.createElement("table", { className: "task-manager-table" }, /* @__PURE__ */ import_react.default.createElement("thead", null, /* @__PURE__ */ import_react.default.createElement("tr", null, /* @__PURE__ */ import_react.default.createElement("th", null, "file"), /* @__PURE__ */ import_react.default.createElement("th", null, "h1"), /* @__PURE__ */ import_react.default.createElement("th", null, "h2"), /* @__PURE__ */ import_react.default.createElement("th", null, "h3"), /* @__PURE__ */ import_react.default.createElement("th", null, "h4"), /* @__PURE__ */ import_react.default.createElement("th", null, "h5"), /* @__PURE__ */ import_react.default.createElement("th", null, "h6"))), /* @__PURE__ */ import_react.default.createElement("tbody", null, filteredTasks.map((task, index) => /* @__PURE__ */ import_react.default.createElement(
+      TaskRow,
+      {
+        key: `${task.file}-${task.level}-${task.text}-${index}`,
+        task,
+        onOpenLink,
+        isCollapsed: collapsedIds.has(task.id),
+        onToggle: handleToggle
+      }
+    ))));
   };
 
   // tests/VisualVerification.tsx
-  var emptyLevel = { text: null, tags: [] };
+  var emptyLevel = { id: null, text: null, tags: [] };
   var sampleTasks = [
     {
-      file: "update vpn configs.md",
-      h1: { text: "AI/project", tags: ["ai-tag"] },
-      h2: { text: "network", tags: ["vpn", "security"] },
-      h3: { text: "dev", tags: ["config"] },
+      id: "project.md:0",
+      file: "project.md",
+      h1: { id: "project.md:0", text: "Main Project", tags: ["urgent"] },
+      h2: emptyLevel,
+      h3: emptyLevel,
       h4: emptyLevel,
       h5: emptyLevel,
       h6: emptyLevel,
-      level: 3,
-      text: "dev",
-      tags: ["config"]
+      level: 1,
+      text: "Main Project",
+      tags: ["urgent"],
+      hasChildren: true
     },
     {
-      file: "Project-B.md",
-      h1: { text: "Main Project", tags: ["urgent"] },
-      h2: { text: "Design Phase", tags: ["ui", "ux"] },
+      id: "project.md:1",
+      file: "project.md",
+      h1: { id: "project.md:0", text: "Main Project", tags: ["urgent"] },
+      h2: { id: "project.md:1", text: "Design Phase", tags: ["ui"] },
       h3: emptyLevel,
       h4: emptyLevel,
       h5: emptyLevel,
       h6: emptyLevel,
       level: 2,
       text: "Design Phase",
-      tags: ["ui", "ux"]
+      tags: ["ui"],
+      hasChildren: true
     },
     {
-      file: "Notes.md",
-      h1: { text: "General", tags: [] },
-      h2: { text: "Sub-topic", tags: ["research"] },
+      id: "project.md:2",
+      file: "project.md",
+      h1: { id: "project.md:0", text: "Main Project", tags: ["urgent"] },
+      h2: { id: "project.md:1", text: "Design Phase", tags: ["ui"] },
+      h3: { id: "project.md:2", text: "Mockups", tags: [] },
+      h4: emptyLevel,
+      h5: emptyLevel,
+      h6: emptyLevel,
+      level: 3,
+      text: "Mockups",
+      tags: [],
+      hasChildren: false
+    },
+    {
+      id: "project.md:3",
+      file: "project.md",
+      h1: { id: "project.md:0", text: "Main Project", tags: ["urgent"] },
+      h2: { id: "project.md:3", text: "Development", tags: ["coding"] },
       h3: emptyLevel,
       h4: emptyLevel,
       h5: emptyLevel,
       h6: emptyLevel,
       level: 2,
-      text: "Sub-topic",
-      tags: ["research"]
+      text: "Development",
+      tags: ["coding"],
+      hasChildren: false
+    },
+    {
+      id: "other.md:0",
+      file: "other.md",
+      h1: { id: "other.md:0", text: "Secondary Task", tags: [] },
+      h2: emptyLevel,
+      h3: emptyLevel,
+      h4: emptyLevel,
+      h5: emptyLevel,
+      h6: emptyLevel,
+      level: 1,
+      text: "Secondary Task",
+      tags: [],
+      hasChildren: false
     }
   ];
   var App = () => {
-    return /* @__PURE__ */ import_react2.default.createElement("div", { style: { padding: "20px", background: "var(--background-primary)", color: "var(--text-normal)", minHeight: "100vh" } }, /* @__PURE__ */ import_react2.default.createElement("h1", null, "Visual Verification: Task Manager UI"), /* @__PURE__ */ import_react2.default.createElement("div", { style: { border: "1px solid var(--background-modifier-border)", borderRadius: "8px", overflow: "hidden" } }, /* @__PURE__ */ import_react2.default.createElement(TaskTable, { tasks: sampleTasks, onOpenLink: (file, heading) => console.log("Open:", file, heading) })), /* @__PURE__ */ import_react2.default.createElement("div", { style: { marginTop: "20px" } }, /* @__PURE__ */ import_react2.default.createElement("h3", null, "Legend:"), /* @__PURE__ */ import_react2.default.createElement("ul", null, /* @__PURE__ */ import_react2.default.createElement("li", null, /* @__PURE__ */ import_react2.default.createElement("strong", null, "Pill:"), " Active heading level tags (Subtle purple bg, grey text)."), /* @__PURE__ */ import_react2.default.createElement("li", null, /* @__PURE__ */ import_react2.default.createElement("strong", null, "Plain Text:"), " Parent level tags (Plain muted text)."))));
+    return /* @__PURE__ */ import_react2.default.createElement("div", { style: { padding: "20px", background: "var(--background-primary)", color: "var(--text-normal)", minHeight: "100vh" } }, /* @__PURE__ */ import_react2.default.createElement("h1", null, "Visual Verification: Hierarchical Toggle"), /* @__PURE__ */ import_react2.default.createElement("div", { style: { border: "1px solid var(--background-modifier-border)", borderRadius: "8px", overflow: "hidden" } }, /* @__PURE__ */ import_react2.default.createElement(TaskTable, { tasks: sampleTasks, onOpenLink: (file, heading) => console.log("Open:", file, heading) })), /* @__PURE__ */ import_react2.default.createElement("div", { style: { marginTop: "20px" } }, /* @__PURE__ */ import_react2.default.createElement("h3", null, "Instructions:"), /* @__PURE__ */ import_react2.default.createElement("ul", null, /* @__PURE__ */ import_react2.default.createElement("li", null, "Click the chevron next to ", /* @__PURE__ */ import_react2.default.createElement("strong", null, "Main Project"), " to collapse the entire project."), /* @__PURE__ */ import_react2.default.createElement("li", null, "Click the chevron next to ", /* @__PURE__ */ import_react2.default.createElement("strong", null, "Design Phase"), " to collapse its subtasks."), /* @__PURE__ */ import_react2.default.createElement("li", null, "Verify that ", /* @__PURE__ */ import_react2.default.createElement("strong", null, "Secondary Task"), " is unaffected."))));
   };
   var container = document.getElementById("root");
   if (container) {
