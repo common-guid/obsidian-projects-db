@@ -28,10 +28,14 @@
   gap: 8px;
 }
 
-.file-icon-wrapper svg {
+.file-icon-wrapper .file-icon,
+.file-icon-wrapper .toggle-button {
   width: 16px;
   height: 16px;
   flex-shrink: 0;
+}
+
+.file-icon-wrapper .file-icon {
   color: var(--text-muted);
 }
 
@@ -115,8 +119,8 @@
 }
 
 .chevron-icon {
-  width: 16px;
-  height: 16px;
+  width: 100%;
+  height: 100%;
   transition: transform 0.2s ease;
   transform: rotate(0deg);
 }

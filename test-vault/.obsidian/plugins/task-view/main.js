@@ -21547,7 +21547,8 @@ var FileIcon = () => /* @__PURE__ */ import_react.default.createElement(
     strokeWidth: "2",
     strokeLinecap: "round",
     strokeLinejoin: "round",
-    "aria-hidden": "true"
+    "aria-hidden": "true",
+    className: "file-icon"
   },
   /* @__PURE__ */ import_react.default.createElement("path", { d: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" }),
   /* @__PURE__ */ import_react.default.createElement("polyline", { points: "14 2 14 8 20 8" }),
@@ -21583,18 +21584,18 @@ var TaskRow = import_react.default.memo(({ task, onOpenLink, isCollapsed, onTogg
       "td",
       {
         className: isActive ? "current-level link" : "",
-        onClick: (e) => {
-          if (e.target.closest(".toggle-button")) return;
-          if (isActive) handleLinkClick(task.file, value.text || "");
-        }
+        onClick: () => isActive && handleLinkClick(task.file, value.text || "")
       },
-      /* @__PURE__ */ import_react.default.createElement("div", { className: "cell-content" }, /* @__PURE__ */ import_react.default.createElement("div", { className: "title-row" }, isActive && task.hasChildren && /* @__PURE__ */ import_react.default.createElement(Chevron, { isCollapsed, onClick: (e) => {
-        e.stopPropagation();
-        onToggle(task.id);
-      } }), isActive ? /* @__PURE__ */ import_react.default.createElement("span", { className: "level-pill" }, value.text) : /* @__PURE__ */ import_react.default.createElement("span", { className: "heading-text" }, value.text)), value.tags.length > 0 && /* @__PURE__ */ import_react.default.createElement("div", { className: "tag-container" }, value.tags.map((tag, idx) => isActive ? /* @__PURE__ */ import_react.default.createElement(TagPill, { key: idx, tag }) : /* @__PURE__ */ import_react.default.createElement("span", { key: idx, className: "heading-tag" }, tag))))
+      /* @__PURE__ */ import_react.default.createElement("div", { className: "cell-content" }, /* @__PURE__ */ import_react.default.createElement("div", { className: "title-row" }, isActive ? /* @__PURE__ */ import_react.default.createElement("span", { className: "level-pill" }, value.text) : /* @__PURE__ */ import_react.default.createElement("span", { className: "heading-text" }, value.text)), value.tags.length > 0 && /* @__PURE__ */ import_react.default.createElement("div", { className: "tag-container" }, value.tags.map((tag, idx) => isActive ? /* @__PURE__ */ import_react.default.createElement(TagPill, { key: idx, tag }) : /* @__PURE__ */ import_react.default.createElement("span", { key: idx, className: "heading-tag" }, tag))))
     );
   };
-  return /* @__PURE__ */ import_react.default.createElement("tr", null, /* @__PURE__ */ import_react.default.createElement("td", { className: "link", onClick: () => handleLinkClick(task.file, "") }, /* @__PURE__ */ import_react.default.createElement("span", { className: "file-icon-wrapper" }, /* @__PURE__ */ import_react.default.createElement(FileIcon, null), task.file)), renderCell(1, task.h1), renderCell(2, task.h2), renderCell(3, task.h3), renderCell(4, task.h4), renderCell(5, task.h5), renderCell(6, task.h6));
+  return /* @__PURE__ */ import_react.default.createElement("tr", null, /* @__PURE__ */ import_react.default.createElement("td", { className: "link", onClick: (e) => {
+    if (e.target.closest(".toggle-button")) return;
+    handleLinkClick(task.file, "");
+  } }, /* @__PURE__ */ import_react.default.createElement("span", { className: "file-icon-wrapper" }, task.hasChildren ? /* @__PURE__ */ import_react.default.createElement(Chevron, { isCollapsed, onClick: (e) => {
+    e.stopPropagation();
+    onToggle(task.id);
+  } }) : /* @__PURE__ */ import_react.default.createElement(FileIcon, null), /* @__PURE__ */ import_react.default.createElement("span", { className: "file-name" }, task.file))), renderCell(1, task.h1), renderCell(2, task.h2), renderCell(3, task.h3), renderCell(4, task.h4), renderCell(5, task.h5), renderCell(6, task.h6));
 });
 var TaskTable = ({ tasks, onOpenLink }) => {
   const [collapsedIds, setCollapsedIds] = (0, import_react.useState)(/* @__PURE__ */ new Set());

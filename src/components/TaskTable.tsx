@@ -17,6 +17,7 @@ const FileIcon: React.FC = () => (
     strokeLinecap="round"
     strokeLinejoin="round"
     aria-hidden="true"
+    className="file-icon"
   >
     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
     <polyline points="14 2 14 8 20 8" />
@@ -66,20 +67,10 @@ const TaskRow = React.memo(({ task, onOpenLink, isCollapsed, onToggle }: {
     return (
       <td
         className={isActive ? 'current-level link' : ''}
-        onClick={(e) => {
-          // Prevent opening link if clicking the toggle button
-          if ((e.target as HTMLElement).closest('.toggle-button')) return;
-          if (isActive) handleLinkClick(task.file, value.text || '');
-        }}
+        onClick={() => isActive && handleLinkClick(task.file, value.text || '')}
       >
         <div className="cell-content">
           <div className="title-row">
-            {isActive && task.hasChildren && (
-              <Chevron isCollapsed={isCollapsed} onClick={(e) => {
-                e.stopPropagation();
-                onToggle(task.id);
-              }} />
-            )}
             {isActive ? (
               <span className="level-pill">{value.text}</span>
             ) : (
@@ -104,10 +95,21 @@ const TaskRow = React.memo(({ task, onOpenLink, isCollapsed, onToggle }: {
 
   return (
     <tr>
-      <td className="link" onClick={() => handleLinkClick(task.file, '')}>
+      <td className="link" onClick={(e) => {
+        // Prevent opening link if clicking the toggle button
+        if ((e.target as HTMLElement).closest('.toggle-button')) return;
+        handleLinkClick(task.file, '');
+      }}>
         <span className="file-icon-wrapper">
-          <FileIcon />
-          {task.file}
+          {task.hasChildren ? (
+            <Chevron isCollapsed={isCollapsed} onClick={(e) => {
+              e.stopPropagation();
+              onToggle(task.id);
+            }} />
+          ) : (
+            <FileIcon />
+          )}
+          <span className="file-name">{task.file}</span>
         </span>
       </td>
       {renderCell(1, task.h1)}
@@ -138,7 +140,6 @@ export const TaskTable: React.FC<TaskTableProps> = ({ tasks, onOpenLink }) => {
   const filteredTasks = useMemo(() => {
     return tasks.filter(task => {
       // Check if any of its parents are collapsed
-      // Parents are h1...h_{level-1}
       for (let i = 1; i < task.level; i++) {
         const parent = (task as any)[`h${i}`] as HeadingLevel;
         if (parent && parent.id && collapsedIds.has(parent.id)) {
