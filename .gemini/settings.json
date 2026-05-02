@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "AfterAgent": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "name": "update-logbook",
+            "type": "command",
+            "command": "bash .gemini/hooks/update_logbook.sh",
+            "description": "Appends a new entry to LOG_BOOK.md when the agent includes TASK_COMPLETE in its response."
+          }
+        ]
+      }
+    ]
+  }
+}

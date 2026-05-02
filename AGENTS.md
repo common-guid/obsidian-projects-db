@@ -21,14 +21,18 @@ The objective of this project is to develop an obsidian plugin that operates as 
 ## Outstanding
 <running list of any items that were deferred or skipped during phase execution. cross out or strikethrough items when completed>
 ```
-3. review the LOG_BOOK.md file this file will be used to log each of the tasks that the agent (you) have completed. For each feature or fix you complete append a new section to the LOG_BOOK.md file in the following format:
+3. review the LOG_BOOK.md file this file will be used to log each of the tasks that the agent (you) have completed. For each feature or fix you complete, the project uses an `AfterAgent` hook to automatically append a new section to the LOG_BOOK.md file. To trigger this, you MUST include a specific completion marker at the end of your response in the following format:
+
 ```markdown
-## name of feature or fix | date of completion
-1 or 2 sentence description of the feature or fix.
+TASK_COMPLETE: <name of feature or fix>
+<1 or 2 sentence description of the feature or fix>
 ```
+
+The hook will automatically add the date and current git branch.
+
 4. **Completion Criteria:**
     Upon completing each feature or fix assigned to you you must: 
     - append an entry to the PROGRESS.md file with a summary of the actions taken and accomplishments, as well as including your intended next steps for continuity between sessions.
-    - append an entry to the LOG_BOOK.md file with a description of the task.
+    - include the `TASK_COMPLETE` marker (as described in Rule 3) in your final response to trigger the log entry.
 5. Developer Documentation is located in the dev-docs directory
 6. Obsidian uses `npm` to build the plugin
