@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+.npm-packages/
+.npm-cache/
+.playwright-cache/
+
+# Build outputs
+main.js
+dist/
+
+# Testing
+coverage/
+.test-vault/
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
+*.log
+
+# Environment
+.env

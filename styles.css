@@ -1,0 +1,11 @@
+/* Obsidian TaskDB Styles */
+
+.task-db-view {
+    padding: 0;
+    overflow: hidden;
+}
+
+.task-db-container {
+    height: 100%;
+    width: 100%;
+}
