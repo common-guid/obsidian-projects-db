@@ -1,0 +1,44 @@
+{
+  "name": "obsidian-taskdb",
+  "version": "0.1.0",
+  "description": "Notion-style database view for Obsidian tasks and subtasks.",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc -noEmit && node esbuild.config.mjs production",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "keywords": [
+    "obsidian",
+    "plugin",
+    "database",
+    "tasks"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "@tanstack/react-table": "^8.20.5",
+    "jsdom": "^29.1.1",
+    "lucide-react": "^0.446.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "@types/react": "^18.3.10",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.7.0",
+    "@typescript-eslint/parser": "^8.7.0",
+    "@vitest/browser": "^2.1.9",
+    "@vitest/coverage-v8": "^2.1.1",
+    "builtin-modules": "^4.0.0",
+    "esbuild": "^0.24.0",
+    "obsidian": "latest",
+    "playwright": "^1.59.1",
+    "tslib": "latest",
+    "typescript": "^5.6.2",
+    "vitest": "^2.1.9"
+  }
+}
