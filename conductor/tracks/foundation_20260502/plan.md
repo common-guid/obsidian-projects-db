@@ -1,6 +1,6 @@
 # Implementation Plan: Foundation: Task Parsing and Data Aggregation
 
-## Phase 1: Environment & Scaffolding
+## Phase 1: Environment & Scaffolding [checkpoint: e58d174]
 - [x] Task: Project Scaffolding (8dee1e2)
     - [x] Configure `main.ts` entry point.
     - [x] Set up basic plugin class extending `Plugin`.
