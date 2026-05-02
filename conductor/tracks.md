@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Foundation: Task Parsing and Data Aggregation**
+- [~] **Track: Foundation: Task Parsing and Data Aggregation**
   *Link: [./tracks/foundation_20260502/](./tracks/foundation_20260502/)*
