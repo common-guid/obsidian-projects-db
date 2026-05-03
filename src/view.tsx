@@ -1,7 +1,7 @@
 import {ItemView, WorkspaceLeaf} from 'obsidian';
 import React from 'react';
 import {createRoot, Root} from 'react-dom/client';
-import {App} from './App';
+import {Root as RootComponent} from './Root';
 
 /**
  * Custom view type for TaskDB.
@@ -28,11 +28,7 @@ class TaskDBView extends ItemView {
 
   async onOpen() {
     this.root = createRoot(this.contentEl);
-    this.root.render(
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    );
+    this.root.render(<RootComponent />);
   }
 
   async onClose() {
