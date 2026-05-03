@@ -34,5 +34,5 @@ The hook will automatically add the date and current git branch.
     Upon completing each feature or fix assigned to you you must: 
     - append an entry to the PROGRESS.md file with a summary of the actions taken and accomplishments, as well as including your intended next steps for continuity between sessions.
     - include the `TASK_COMPLETE` marker (as described in Rule 3) in your final response to trigger the log entry.
-5. Developer Documentation is located in the dev-docs directory
+5. Developer Documentation is located in the obsidian-dev-docs directory
 6. Obsidian uses `npm` to build the plugin

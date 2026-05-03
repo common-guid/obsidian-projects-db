@@ -1,4 +1,7 @@
 {
+  "hooksConfig": {
+    "enabled": true
+  },
   "hooks": {
     "AfterAgent": [
       {
@@ -7,8 +10,14 @@
           {
             "name": "update-logbook",
             "type": "command",
-            "command": "bash .gemini/hooks/update_logbook.sh",
-            "description": "Appends a new entry to LOG_BOOK.md when the agent includes TASK_COMPLETE in its response."
+            "command": "/home/guid/projects/obsidian_dev/life_manager/.gemini/hooks/update_logbook.sh",
+            "enabled": true
+          },
+          {
+            "name": "test-hook",
+            "type": "command",
+            "command": "/home/guid/projects/obsidian_dev/life_manager/.gemini/hooks/test_hook.sh",
+            "enabled": true
           }
         ]
       }

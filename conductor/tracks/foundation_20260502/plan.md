@@ -7,12 +7,12 @@
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Environment & Scaffolding' (Protocol in workflow.md)
 
 ## Phase 2: Data Extraction Service
-- [ ] Task: Metadata Parsing Logic
-    - [ ] Implement `parseFileCache()` for headings and frontmatter.
-    - [ ] Implement `headingLevelFilter()`.
-- [ ] Task: Event Handlers
-    - [ ] Register `app.metadataCache.on('changed')` listener.
-    - [ ] Register `app.metadataCache.on('resolved')` listener.
+- [x] Task: Metadata Parsing Logic (6fc8b32)
+    - [x] Implement `parseFileCache()` for headings and frontmatter.
+    - [x] Implement `headingLevelFilter()`.
+- [x] Task: Event Handlers (e6b36e6)
+    - [x] Register `app.metadataCache.on('changed')` listener.
+    - [x] Register `app.metadataCache.on('resolved')` listener.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Data Extraction Service' (Protocol in workflow.md)
 
 ## Phase 3: State Management

@@ -4,6 +4,8 @@ import path from 'path';
 export default defineConfig({
 	test: {
 		environment: 'node',
+		include: ['tests/**/*.test.ts'],
+		exclude: ['tests/**/*.browser.test.ts', 'tests/verification.test.tsx'],
 		alias: {
 			'obsidian': path.resolve(__dirname, './tests/__mocks__/obsidian.ts'),
 		},
