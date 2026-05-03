@@ -32,8 +32,10 @@ export class Plugin {
 export class ItemView {
   constructor(leaf: any) {
     this.leaf = leaf;
+    this.contentEl = leaf.contentEl || { append: () => {} };
   }
   leaf: any;
+  contentEl: any;
   getViewType() { return ''; }
   getDisplayText() { return ''; }
   onOpen() {}
