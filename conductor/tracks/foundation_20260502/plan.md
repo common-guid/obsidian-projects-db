@@ -4,7 +4,7 @@
 - [x] Task: Project Scaffolding (8dee1e2)
     - [x] Configure `main.ts` entry point.
     - [x] Set up basic plugin class extending `Plugin`.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Environment & Scaffolding' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Environment & Scaffolding' (Protocol in workflow.md) (e5e916a)
 
 ## Phase 2: Data Extraction Service
 - [x] Task: Metadata Parsing Logic (6fc8b32)
