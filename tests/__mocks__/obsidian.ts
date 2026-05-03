@@ -20,6 +20,11 @@ export class Plugin {
   async onload() {}
   onunload() {}
   registerEvent(eventRef: any) {}
+  registerView(type: string, viewCreator: any) {}
+  addRibbonIcon(icon: string, title: string, callback: any) {
+    return { icon, title, callback };
+  }
+  addCommand(command: any) {}
   app: any;
   manifest: any;
 }
@@ -29,10 +34,20 @@ export class ItemView {
     this.leaf = leaf;
   }
   leaf: any;
+  getViewType() { return ''; }
+  getDisplayText() { return ''; }
+  onOpen() {}
+  onClose() {}
 }
 
 export class MetadataCache extends Events {}
 
 export const App = {
   metadataCache: new MetadataCache(),
+  workspace: {
+    getLeavesOfType: (type: string) => [],
+    revealLeaf: (leaf: any) => {},
+    getLeaf: (type: string) => ({ setViewState: (state: any) => {} }),
+    getRightLeaf: (toggle: boolean) => ({ setViewState: (state: any) => {} }),
+  }
 };

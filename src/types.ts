@@ -33,4 +33,4 @@ interface Subtask extends BaseTask {
   properties: Record<string, string>;
 }
 
-export {TaskType, BaseTask, ParentTask, Subtask};
+export type {TaskType, BaseTask, ParentTask, Subtask};
