@@ -1,9 +1,9 @@
 # Implementation Plan: Phase 1 - Interactive Database View
 
 ## Phase 1: View Infrastructure
-- [ ] Task: Register TaskDB View
-    - [ ] Create `TaskDBView` class extending `ItemView`.
-    - [ ] Add a ribbon icon and command to open the view.
+- [x] Task: Register TaskDB View (c725310)
+    - [x] Create `TaskDBView` class extending `ItemView`.
+    - [x] Add a ribbon icon and command to open the view.
 - [ ] Task: React Mounting Logic
     - [ ] Create a `Root` component as the React entry point.
     - [ ] Implement mounting/unmounting in `TaskDBView.onOpen` and `onClose`.
