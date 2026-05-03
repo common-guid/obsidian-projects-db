@@ -20,3 +20,6 @@
     - [x] Define `Task` and `Subtask` types.
     - [x] Create centralized store with actions to update task data.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: State Management' (Protocol in workflow.md) (df3d187)
+
+## Phase: Review Fixes
+- [x] Task: Apply review suggestions (b319f4c)
