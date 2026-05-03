@@ -4,9 +4,9 @@
 - [x] Task: Register TaskDB View (c725310)
     - [x] Create `TaskDBView` class extending `ItemView`.
     - [x] Add a ribbon icon and command to open the view.
-- [ ] Task: React Mounting Logic
-    - [ ] Create a `Root` component as the React entry point.
-    - [ ] Implement mounting/unmounting in `TaskDBView.onOpen` and `onClose`.
+- [x] Task: React Mounting Logic (e5925ea)
+    - [x] Create a `Root` component as the React entry point.
+    - [x] Implement mounting/unmounting in `TaskDBView.onOpen` and `onClose`.
 
 ## Phase 2: Table Implementation
 - [ ] Task: Basic Table Component
