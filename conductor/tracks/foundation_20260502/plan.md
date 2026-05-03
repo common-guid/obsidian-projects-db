@@ -13,7 +13,7 @@
 - [x] Task: Event Handlers (e6b36e6)
     - [x] Register `app.metadataCache.on('changed')` listener.
     - [x] Register `app.metadataCache.on('resolved')` listener.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Data Extraction Service' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Data Extraction Service' (76b5b4f) (Protocol in workflow.md)
 
 ## Phase 3: State Management
 - [ ] Task: Zustand Store Implementation
