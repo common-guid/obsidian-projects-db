@@ -6,7 +6,7 @@
     - [x] Set up basic plugin class extending `Plugin`.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Environment & Scaffolding' (Protocol in workflow.md) (e5e916a)
 
-## Phase 2: Data Extraction Service
+## Phase 2: Data Extraction Service [checkpoint: b87eff6]
 - [x] Task: Metadata Parsing Logic (6fc8b32)
     - [x] Implement `parseFileCache()` for headings and frontmatter.
     - [x] Implement `headingLevelFilter()`.
