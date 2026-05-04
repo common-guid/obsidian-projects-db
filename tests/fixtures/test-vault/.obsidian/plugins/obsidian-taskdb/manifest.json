@@ -1,0 +1,10 @@
+{
+  "id": "obsidian-taskdb",
+  "name": "TaskDB",
+  "version": "0.1.0",
+  "minAppVersion": "1.0.0",
+  "description": "Notion-style database view for Obsidian tasks and subtasks.",
+  "author": "Your Name",
+  "authorUrl": "https://example.com",
+  "isDesktopOnly": false
+}
