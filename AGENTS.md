@@ -24,8 +24,9 @@ The objective of this project is to develop an obsidian plugin that operates as 
 3. review the LOG_BOOK.md file this file will be used to log each of the tasks that the agent (you) have completed. For each feature or fix you complete, the project uses an `AfterAgent` hook to automatically append a new section to the LOG_BOOK.md file. To trigger this, you MUST include a specific completion marker at the end of your response in the following format:
 
 ```markdown
-TASK_COMPLETE: <name of feature or fix>
-<1 or 2 sentence description of the feature or fix>
+<Task Title>
+<Date> | <Branch>
+<description of the feature or fix>
 ```
 
 The hook will automatically add the date and current git branch.

@@ -1,41 +1,41 @@
 import { describe, it, expect } from 'vitest';
 import { page } from '@vitest/browser/context';
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import { Root } from '../src/Root';
+import { useTaskStore } from '../src/store';
 
 describe('Verification Screenshot', () => {
-	it('should capture a screenshot of the test environment', async () => {
-		await page.goto('about:blank');
-		document.body.innerHTML = `
-			<div style="padding: 20px; font-family: sans-serif; background: #1e1e1e; color: #fff;">
-				<h1>Obsidian TaskDB Verification</h1>
-				<p>Environment: Gemini CLI Sandbox</p>
-				<p>Status: Pre-Implementation Setup Complete</p>
-				<table style="width: 100%; border-collapse: collapse; margin-top: 20px; border: 1px solid #444;">
-					<thead>
-						<tr style="background: #333;">
-							<th style="padding: 8px; border: 1px solid #444; text-align: left;">Task</th>
-							<th style="padding: 8px; border: 1px solid #444; text-align: left;">Status</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td style="padding: 8px; border: 1px solid #444;">Scaffold src/</td>
-							<td style="padding: 8px; border: 1px solid #444; color: #4caf50;">DONE</td>
-						</tr>
-						<tr>
-							<td style="padding: 8px; border: 1px solid #444;">Restore esbuild.config.mjs</td>
-							<td style="padding: 8px; border: 1px solid #444; color: #4caf50;">DONE</td>
-						</tr>
-						<tr>
-							<td style="padding: 8px; border: 1px solid #444;">Setup Headless Testing</td>
-							<td style="padding: 8px; border: 1px solid #444; color: #4caf50;">DONE</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		`;
+	it('should capture a screenshot of the active React UI', async () => {
+		// Seed the store with some test data
+		useTaskStore.getState().reset();
+		useTaskStore.getState().addParentTask({
+			id: '1',
+			name: 'Project Alpha',
+			type: 'note',
+			path: 'Project Alpha.md',
+			frontmatter: { status: 'active' },
+		});
+		useTaskStore.getState().addSubtask({
+			id: '2',
+			name: 'Implement View Logic',
+			type: 'heading',
+			path: 'Project Alpha.md',
+			parentPath: 'Project Alpha.md',
+			level: 2,
+			properties: { priority: 'high' },
+		});
+
+		const container = document.createElement('div');
+		document.body.appendChild(container);
+		const root = createRoot(container);
+		root.render(<Root />);
+		
+		// Wait for render and styles
+		await new Promise(resolve => setTimeout(resolve, 500));
 		
 		// Capture screenshot to the verification directory
-		await page.screenshot({ path: '/home/guid/.gemini/tmp/life-manager/verification/setup-complete.png' });
+		await page.screenshot({ path: '/home/guid/.gemini/tmp/life-manager/verification/ui-verification.png' });
 		
 		expect(true).toBe(true);
 	});
