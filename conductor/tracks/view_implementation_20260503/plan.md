@@ -20,7 +20,7 @@
 - [x] Task: Markdown Code Block Integration (328aa24)
     - [x] Register `registerMarkdownCodeBlockProcessor` for `taskdb` blocks.
     - [x] Reuse the Table component for embedded rendering.
-- [ ] Task: Update Screenshot Pipeline
-    - [ ] Modify `tests/verification.test.tsx` or create a new test to capture the active React UI.
-    - [ ] Run `capture-obsidian.sh` to confirm visual correctness.
+- [x] Task: Update Screenshot Pipeline (680d4db)
+    - [x] Modify `tests/verification.test.tsx` or create a new test to capture the active React UI.
+    - [x] Run `capture-obsidian.sh` to confirm visual correctness.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Interactive Database View'
