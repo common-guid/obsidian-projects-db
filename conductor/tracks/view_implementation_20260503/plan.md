@@ -23,4 +23,4 @@
 - [x] Task: Update Screenshot Pipeline (680d4db)
     - [x] Modify `tests/verification.test.tsx` or create a new test to capture the active React UI.
     - [x] Run `capture-obsidian.sh` to confirm visual correctness.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Interactive Database View'
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Interactive Database View' (e18179c)
