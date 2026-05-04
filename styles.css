@@ -1,11 +1,47 @@
 /* Obsidian TaskDB Styles */
 
-.task-db-view {
-    padding: 0;
+.taskdb-container {
+    padding: 20px;
+    height: 100%;
+    overflow-y: auto;
+    background-color: var(--background-primary);
+    color: var(--text-normal);
+}
+
+.task-table-container {
+    margin-top: 20px;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 4px;
     overflow: hidden;
 }
 
-.task-db-container {
-    height: 100%;
+.task-table {
     width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-ui-small);
+}
+
+.task-table thead {
+    background-color: var(--background-secondary);
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.task-table th {
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.task-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.task-table tr:last-child td {
+    border-bottom: none;
+}
+
+.task-table tr:hover {
+    background-color: var(--background-modifier-hover);
 }

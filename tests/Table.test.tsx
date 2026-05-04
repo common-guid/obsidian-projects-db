@@ -70,4 +70,27 @@ describe('TaskTable Component', () => {
     expect(container.innerHTML).toContain('Subtask 1');
     expect(container.innerHTML).toContain('heading');
   });
+
+  it('should have the correct CSS classes for styling', async () => {
+    useTaskStore.getState().addParentTask({
+      id: '1',
+      name: 'Project Alpha',
+      type: 'note',
+      path: 'Project Alpha.md',
+      frontmatter: {},
+    });
+
+    const root = createRoot(container);
+    root.render(<TaskTable />);
+
+    // Wait for render
+    await new Promise(resolve => setTimeout(resolve, 50));
+    
+    expect(container.querySelector('.task-table-container')).not.toBeNull();
+    expect(container.querySelector('.task-table')).not.toBeNull();
+    expect(container.querySelector('thead')).not.toBeNull();
+    expect(container.querySelector('tbody')).not.toBeNull();
+    expect(container.querySelector('th')).not.toBeNull();
+    expect(container.querySelector('td')).not.toBeNull();
+  });
 });
