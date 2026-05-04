@@ -17,9 +17,9 @@
     - [x] Ensure layout responsiveness.
 
 ## Phase 3: Verification & Polish
-- [ ] Task: Markdown Code Block Integration
-    - [ ] Register `registerMarkdownCodeBlockProcessor` for `taskdb` blocks.
-    - [ ] Reuse the Table component for embedded rendering.
+- [x] Task: Markdown Code Block Integration (328aa24)
+    - [x] Register `registerMarkdownCodeBlockProcessor` for `taskdb` blocks.
+    - [x] Reuse the Table component for embedded rendering.
 - [ ] Task: Update Screenshot Pipeline
     - [ ] Modify `tests/verification.test.tsx` or create a new test to capture the active React UI.
     - [ ] Run `capture-obsidian.sh` to confirm visual correctness.
