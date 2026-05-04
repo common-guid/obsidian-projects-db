@@ -21,6 +21,7 @@ export class Plugin {
   onunload() {}
   registerEvent(eventRef: any) {}
   registerView(type: string, viewCreator: any) {}
+  registerMarkdownCodeBlockProcessor(language: string, handler: any) {}
   addRibbonIcon(icon: string, title: string, callback: any) {
     return { icon, title, callback };
   }

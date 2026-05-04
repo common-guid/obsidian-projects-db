@@ -1,5 +1,8 @@
 import {Plugin, WorkspaceLeaf} from 'obsidian';
 import {TaskDBView, VIEW_TYPE_TASKDB} from './view';
+import {createRoot} from 'react-dom/client';
+import React from 'react';
+import {Root as RootComponent} from './Root';
 
 /**
  * Main plugin class for Obsidian TaskDB.
@@ -15,6 +18,11 @@ class TaskDBPlugin extends Plugin {
       VIEW_TYPE_TASKDB,
       (leaf) => new TaskDBView(leaf)
     );
+
+    this.registerMarkdownCodeBlockProcessor('taskdb', (source, el, ctx) => {
+      const root = createRoot(el);
+      root.render(<RootComponent />);
+    });
 
     this.addRibbonIcon('table', 'Open TaskDB', () => {
       this.activateView();
