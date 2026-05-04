@@ -8,7 +8,7 @@
     - [x] Create a `Root` component as the React entry point.
     - [x] Implement mounting/unmounting in `TaskDBView.onOpen` and `onClose`.
 
-## Phase 2: Table Implementation
+## Phase 2: Table Implementation [checkpoint: bd5f3f2]
 - [x] Task: Basic Table Component (46fca9c)
     - [x] Implement `TanStack Table` with "Name" and "Type" columns.
     - [x] Connect the table to `useTaskStore` to display live vault data.
