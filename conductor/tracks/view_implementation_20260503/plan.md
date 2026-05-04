@@ -12,9 +12,9 @@
 - [x] Task: Basic Table Component (46fca9c)
     - [x] Implement `TanStack Table` with "Name" and "Type" columns.
     - [x] Connect the table to `useTaskStore` to display live vault data.
-- [ ] Task: Native Styling
-    - [ ] Apply Obsidian-themed CSS to the table (borders, headers, hover states).
-    - [ ] Ensure layout responsiveness.
+- [x] Task: Native Styling (dd42521)
+    - [x] Apply Obsidian-themed CSS to the table (borders, headers, hover states).
+    - [x] Ensure layout responsiveness.
 
 ## Phase 3: Verification & Polish
 - [ ] Task: Markdown Code Block Integration
