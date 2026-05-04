@@ -1,10 +1,25 @@
 #!/bin/bash
 # capture-obsidian.sh: Launch Obsidian and capture a screenshot for verification
 
-VAULT_PATH="/home/guid/projects/obsidian_dev/life_manager/tests/fixtures/test-vault"
+PROJECT_ROOT="/home/guid/projects/obsidian_dev/life_manager"
+VAULT_PATH="$PROJECT_ROOT/tests/fixtures/test-vault"
 SCREENSHOT_DIR="/home/guid/.gemini/tmp/life-manager/verification"
 SCREENSHOT_PATH="$SCREENSHOT_DIR/obsidian-capture-$(date +%Y%m%d-%H%M%S).png"
-LOG_BOOK="/home/guid/projects/obsidian_dev/life_manager/LOG_BOOK.md"
+LOG_BOOK="$PROJECT_ROOT/LOG_BOOK.md"
+PLUGIN_DIR="$VAULT_PATH/.obsidian/plugins/obsidian-taskdb"
+
+# 1. Build the plugin
+echo "Building TaskDB plugin..."
+cd "$PROJECT_ROOT"
+npm run build
+
+# 2. Inject the plugin into the test vault
+echo "Injecting plugin into test vault..."
+mkdir -p "$PLUGIN_DIR"
+cp main.js manifest.json "$PLUGIN_DIR/"
+if [ -f styles.css ]; then
+    cp styles.css "$PLUGIN_DIR/"
+fi
 
 # Use a writable directory for Obsidian's configuration
 export HOME=/tmp/obsidian-home
@@ -19,7 +34,6 @@ OBSIDIAN_PID=$!
 
 echo "Waiting for Obsidian window to appear..."
 # Wait up to 30 seconds for the window to be managed by the window manager
-# Fallback to checking if the process is still running if wmctrl fails
 MAX_WAIT=30
 WAIT_COUNT=0
 WINDOW_DETECTED=false
@@ -44,6 +58,20 @@ if [ "$WINDOW_DETECTED" = false ]; then
     echo "Attempting capture anyway after extra wait..."
     sleep 10
 fi
+
+# 3. UI Automation to open the view
+echo "Opening TaskDB view via Command Palette..."
+# Focus the window
+xdotool search --name "Obsidian" windowactivate --sync
+sleep 2
+# Open Command Palette
+xdotool key ctrl+p
+sleep 1
+# Type the command
+xdotool type "TaskDB: Open TaskDB"
+sleep 1
+# Execute
+xdotool key Return
 
 # Give it a few more seconds to finish rendering the content
 echo "Waiting for rendering to complete..."
