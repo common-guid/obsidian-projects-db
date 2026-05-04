@@ -9,9 +9,9 @@
     - [x] Implement mounting/unmounting in `TaskDBView.onOpen` and `onClose`.
 
 ## Phase 2: Table Implementation
-- [ ] Task: Basic Table Component
-    - [ ] Implement `TanStack Table` with "Name" and "Type" columns.
-    - [ ] Connect the table to `useTaskStore` to display live vault data.
+- [x] Task: Basic Table Component (46fca9c)
+    - [x] Implement `TanStack Table` with "Name" and "Type" columns.
+    - [x] Connect the table to `useTaskStore` to display live vault data.
 - [ ] Task: Native Styling
     - [ ] Apply Obsidian-themed CSS to the table (borders, headers, hover states).
     - [ ] Ensure layout responsiveness.
