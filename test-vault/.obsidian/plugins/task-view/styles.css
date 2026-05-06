@@ -71,19 +71,15 @@
   color: var(--text-normal);
 }
 
-/* Structured header with subtle column dividers */
+/* Structured header with thicker borders and larger bold font */
 .tm-table thead th {
-  padding: 8px 12px;
+  padding: 10px 14px;
   text-transform: capitalize;
-  color: var(--text-muted);
-  font-weight: 500;
+  color: var(--text-normal);
+  font-weight: bold;
+  font-size: calc(var(--font-ui-medium) + 4px);
   text-align: left;
-  border-right: 1px solid var(--background-modifier-border);
-  border-bottom: 2px solid var(--background-modifier-border);
-}
-
-.tm-table thead th:last-child {
-  border-right: none;
+  border: 2px solid var(--background-modifier-border);
 }
 
 /* Interactive row hover */
