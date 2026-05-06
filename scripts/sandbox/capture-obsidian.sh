@@ -13,7 +13,11 @@ echo "Building TaskDB plugin..."
 cd "$PROJECT_ROOT"
 npm run build
 
-# 2. Inject the plugin into the test vault
+# 2. Ensure Obsidian binary is available
+echo "Ensuring Obsidian binary is available..."
+./scripts/sandbox/manage-obsidian.sh "1.5.12"
+
+# 3. Inject the plugin into the test vault
 echo "Injecting plugin into test vault..."
 mkdir -p "$PLUGIN_DIR"
 cp main.js manifest.json "$PLUGIN_DIR/"
@@ -27,9 +31,14 @@ export XDG_CONFIG_HOME=/tmp/obsidian-home/.config
 mkdir -p "$XDG_CONFIG_HOME"
 mkdir -p "$SCREENSHOT_DIR"
 
+OBSIDIAN_BIN="$(pwd)/.obsidian-bin/squashfs-root/chrome-sandbox"
+# The actual executable inside squashfs-root is often 'obsidian' or 'AppRun'
+# We'll use the symlink created by manage-obsidian.sh
+OBSIDIAN_EXEC="$(pwd)/.obsidian-bin/squashfs-root/obsidian"
+
 echo "Launching Obsidian (headless)..."
 # Start Obsidian with --no-sandbox and --disable-gpu
-obsidian --no-sandbox --disable-gpu "$VAULT_PATH" &
+"$OBSIDIAN_EXEC" --no-sandbox --disable-gpu "$VAULT_PATH" &
 OBSIDIAN_PID=$!
 
 echo "Waiting for Obsidian window to appear..."
