@@ -23,5 +23,5 @@
 3.  [s] **Save Image**:
     -   Copy/Move the captured image to `/tests/interface_images/reimagine-hierarchy.png`. (Skipped)
 
-## Phase 4: Final Deployment
+## Phase 4: Final Deployment [checkpoint: e6ddbff]
 1.  [x] **Final Deployment**: Run `scripts/deploy.sh` for final verification. eddcc2c
