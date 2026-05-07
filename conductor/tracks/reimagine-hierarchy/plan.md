@@ -4,7 +4,7 @@
 1.  [x] Verify the current data structure of `HeadingTask` to ensure it contains necessary level and grouping information. f48d65f
 2.  [x] Review `TaskTable.tsx` to identify where to inject grouping logic. bceb7ad
 
-## Phase 2: Implementation
+## Phase 2: Implementation [checkpoint: 093c3e0]
 1.  [x] **Refactor Component Structure**:
     -   Modify `TaskTable` to group `filteredTasks` by `file`.
     -   Introduce a `FileGroup` component or sub-render to display the file header. 4bc33c0
