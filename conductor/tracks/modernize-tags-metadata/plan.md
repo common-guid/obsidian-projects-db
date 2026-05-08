@@ -15,18 +15,18 @@
     -   Add specific styles for `.tm-tag-pill` and new metadata badge classes.
     -   Ensure hover states and contrast ratios meet accessibility standards. e54b6cb
 
-## Phase 3: Custom Tag Coloring
-1.  [~] **Right-Click Menu Integration**:
+## Phase 3: Custom Tag Coloring [checkpoint: 94b54a1]
+1.  [x] **Right-Click Menu Integration**:
     -   Add a context menu listener to the `TagPill` component.
-    -   Implement the "Tag Color" menu item using Obsidian's `Menu` API.
-2.  **Color Wheel Selection**:
+    -   Implement the "Tag Color" menu item using Obsidian's `Menu` API. 94b54a1
+2.  [x] **Color Wheel Selection**:
     -   Develop or integrate a color picker modal (color wheel).
-    -   Handle color selection and update the plugin's persistent settings.
-3.  **Apply Persistent Styling**:
-    -   Modify `TagPill` to fetch and apply user-defined colors from settings.
+    -   Handle color selection and update the plugin's persistent settings. 94b54a1
+3.  [x] **Apply Persistent Styling**:
+    -   Modify `TagPill` to fetch and apply user-defined colors from settings. 94b54a1
 
 ## Phase 4: Visual Verification
-1.  **Deploy for Capture**: Run `scripts/deploy.sh` to update the sandbox.
+1.  [x] **Deploy for Capture**: Run `scripts/deploy.sh` to update the sandbox.
 2.  **Run Screenshot Script**:
     -   Execute `scripts/sandbox/capture-obsidian.sh`.
 3.  **Save Image**:
