@@ -27,10 +27,10 @@
 
 ## Phase 4: Visual Verification
 1.  [x] **Deploy for Capture**: Run `scripts/deploy.sh` to update the sandbox.
-2.  **Run Screenshot Script**:
-    -   Execute `scripts/sandbox/capture-obsidian.sh`.
-3.  **Save Image**:
-    -   Move the captured image to `/tests/interface_images/modernize-tags-metadata.png`.
+2.  [s] **Run Screenshot Script**:
+    -   Execute `scripts/sandbox/capture-obsidian.sh`. (Skipped: Missing sandbox dependencies)
+3.  [s] **Save Image**:
+    -   Move the captured image to `/tests/interface_images/modernize-tags-metadata.png`. (Skipped)
 
 ## Phase 5: Final Deployment
 1.  Run `scripts/deploy.sh` for final verification.
