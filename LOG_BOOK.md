@@ -22,5 +22,11 @@ Resolved issues where Obsidian themes or other plugins (like "Bases") were causi
 ## Visual Verification | 2026-05-10
 Screenshot captured: `/app/tests/interface_images/obsidian-capture-20260510-183347.png`
 
-## Visual Depth and Obsidian-Native Feel | $(date +%Y-%m-%d)
-Implemented hover states using standard `--background-modifier-hover` on rows for visual tracking. Added indentation guides using CSS mapping over `task.level`, and updated task rendering to convert `- [ ]` and `- [x]` into Lucide-style checkbox icons for a native Obsidian feel.
+## Colored Hierarchy Bars | 2026-05-12
+Replaced the 1px vertical indentation guides with thicker (4px), colored bars to improve visual grouping of sub-tasks, as requested. 
+- Implemented a configurable color palette for heading levels 1-6 in the plugin settings.
+- Added `TaskManagerSettings` interface and `TaskManagerSettingTab` to allow users to customize colors via a color picker.
+- Updated `TaskTable` and `TaskRow` components to accept settings and apply the configured colors to the `tm-indent-guide` elements.
+- Refined `styles.css` to support the wider, rounded bars while maintaining layout alignment.
+- Verified that all unit tests pass, including new mocks for the settings system.
+- Note: Automated visual verification via `capture-obsidian.sh` could not be completed in this environment due to missing GUI libraries (`libgobject-2.0.so.0`) and tools (`wmctrl`, `scrot`). Manual verification in Obsidian is recommended.

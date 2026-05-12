@@ -67,14 +67,19 @@ describe('TaskBasesView', () => {
       createDiv: vi.fn()
     })
   } as any;
+  const mockPlugin = {
+    settings: {
+      levelColors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff']
+    }
+  } as any;
 
   it('should be a class extending BasesView', () => {
-    const view = new TaskBasesView(controller, parentEl);
+    const view = new TaskBasesView(controller, parentEl, mockPlugin);
     expect(view.type).toBe(ExampleViewType);
   });
 
   it('should flatten Bases data into heading-based tasks', () => {
-    const view = new TaskBasesView(controller, parentEl);
+    const view = new TaskBasesView(controller, parentEl, mockPlugin);
     
     // Mock Obsidian app with metadata cache
     (view as any).app = {
@@ -112,13 +117,13 @@ describe('TaskBasesView', () => {
   });
 
   it('should return empty array if data is missing', () => {
-    const view = new TaskBasesView(controller, parentEl);
+    const view = new TaskBasesView(controller, parentEl, mockPlugin);
     (view as any).data = null;
     expect((view as any).flattenData()).toEqual([]);
   });
 
   it('should skip files with no metadata cache', () => {
-    const view = new TaskBasesView(controller, parentEl);
+    const view = new TaskBasesView(controller, parentEl, mockPlugin);
     (view as any).app = {
       metadataCache: {
         getFileCache: vi.fn().mockReturnValue(null)

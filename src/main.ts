@@ -1,4 +1,4 @@
-import { Plugin, BasesView } from 'obsidian';
+import { Plugin, BasesView, PluginSettingTab, Setting } from 'obsidian';
 import React from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { mapHeadingsToTasks } from './mapper';
@@ -7,15 +7,34 @@ import { TaskTable } from './components/TaskTable';
 
 export const ExampleViewType = 'task-table';
 
+export interface TaskManagerSettings {
+  levelColors: string[];
+}
+
+export const DEFAULT_SETTINGS: TaskManagerSettings = {
+  levelColors: [
+    '#70e0af', // Level 1 - Tealish
+    '#70a1e0', // Level 2 - Bluish
+    '#e0d270', // Level 3 - Yellowish
+    '#e070af', // Level 4 - Pinkish
+    '#e0e0e0', // Level 5 - Whitish
+    '#e0a170', // Level 6 - Orangish
+  ]
+};
+
 export default class TaskManagerPlugin extends Plugin {
+  settings: TaskManagerSettings;
+
   async onload() {
     console.log('Task Manager Plugin loading...');
+
+    await this.loadSettings();
 
     const registered = this.registerBasesView(ExampleViewType, {
       name: 'Task Table',
       icon: 'lucide-table',
       factory: (controller, containerEl) => {
-        return new TaskBasesView(controller, containerEl);
+        return new TaskBasesView(controller, containerEl, this);
       },
     });
 
@@ -23,6 +42,8 @@ export default class TaskManagerPlugin extends Plugin {
       console.warn('Task Manager: registerBasesView returned false — Bases may not be enabled in this vault.');
       return;
     }
+
+    this.addSettingTab(new TaskManagerSettingTab(this.app, this));
 
     console.log('Task Table view registered successfully.');
 
@@ -36,15 +57,62 @@ export default class TaskManagerPlugin extends Plugin {
       });
     });
   }
+
+  async loadSettings() {
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+  }
+
+  async saveSettings() {
+    await this.saveData(this.settings);
+    // Notify all open views to re-render with new settings
+    this.app.workspace.getLeavesOfType('bases').forEach((leaf: any) => {
+      if (leaf.view instanceof TaskBasesView) {
+        leaf.view.onDataUpdated();
+      }
+    });
+  }
+}
+
+class TaskManagerSettingTab extends PluginSettingTab {
+  plugin: TaskManagerPlugin;
+
+  constructor(app: any, plugin: TaskManagerPlugin) {
+    super(app, plugin);
+    this.plugin = plugin;
+  }
+
+  display(): void {
+    const { containerEl } = this;
+
+    containerEl.empty();
+
+    containerEl.createEl('h2', { text: 'Task Manager Settings' });
+
+    containerEl.createEl('h3', { text: 'Hierarchy Colors' });
+    
+    this.plugin.settings.levelColors.forEach((color, index) => {
+      new Setting(containerEl)
+        .setName(`Level ${index + 1} Color`)
+        .setDesc(`Color for the vertical bar at hierarchy level ${index + 1}`)
+        .addColorPicker(colorPicker => colorPicker
+          .setValue(color)
+          .onChange(async (value) => {
+            this.plugin.settings.levelColors[index] = value;
+            await this.plugin.saveSettings();
+          }));
+    });
+  }
 }
 
 export class TaskBasesView extends BasesView {
   readonly type = ExampleViewType;
   private containerEl: HTMLElement;
   private root: Root | null = null;
+  private plugin: TaskManagerPlugin;
 
-  constructor(controller: any, parentEl: HTMLElement) {
+  constructor(controller: any, parentEl: HTMLElement, plugin: TaskManagerPlugin) {
     super(controller);
+    this.plugin = plugin;
     this.containerEl = parentEl.createDiv('task-manager-view-container');
   }
 
@@ -64,7 +132,8 @@ export class TaskBasesView extends BasesView {
     this.root.render(
       React.createElement(TaskTable, { 
         tasks: flattenedTasks,
-        onOpenLink: handleOpenLink
+        onOpenLink: handleOpenLink,
+        settings: this.plugin.settings
       })
     );
   }

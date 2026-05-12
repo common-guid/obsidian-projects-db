@@ -199,7 +199,7 @@
   position: absolute;
   top: -8px; /* Offset for cell padding to make lines continuous */
   bottom: -8px;
-  width: 1px;
-  background-color: var(--background-modifier-border);
+  width: 4px;
   z-index: 1;
+  border-radius: 2px;
 }

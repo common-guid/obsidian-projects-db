@@ -4,6 +4,9 @@ import { HeadingTask, HeadingLevel } from '../types';
 interface TaskTableProps {
   tasks: HeadingTask[];
   onOpenLink?: (file: string, heading: string) => void;
+  settings?: {
+    levelColors: string[];
+  };
 }
 
 // Inline Lucide-style file-text SVG icon
@@ -92,11 +95,12 @@ const TagPill: React.FC<{ tag: string }> = ({ tag }) => (
   <span className="tm-tag-pill">{tag}</span>
 );
 
-const TaskRow = React.memo(({ task, onOpenLink, isCollapsed, onToggle }: { 
+const TaskRow = React.memo(({ task, onOpenLink, isCollapsed, onToggle, settings }: { 
   task: HeadingTask, 
   onOpenLink?: (file: string, heading: string) => void,
   isCollapsed: boolean,
-  onToggle: (id: string) => void
+  onToggle: (id: string) => void,
+  settings?: { levelColors: string[] }
 }) => {
   const handleLinkClick = (file: string, heading: string) => {
     if (onOpenLink) {
@@ -146,7 +150,11 @@ const TaskRow = React.memo(({ task, onOpenLink, isCollapsed, onToggle }: {
             <div
               key={i}
               className="tm-indent-guide"
-              style={{ left: `${i * 20 + 8}px` }}
+              style={{ 
+                left: `${i * 20 + 8}px`,
+                backgroundColor: settings?.levelColors[i] || 'var(--background-modifier-border)',
+                width: '4px'
+              }}
             />
           ))}
           <div className="tm-title-row">
@@ -174,7 +182,7 @@ const TaskRow = React.memo(({ task, onOpenLink, isCollapsed, onToggle }: {
   );
 });
 
-export const TaskTable: React.FC<TaskTableProps> = ({ tasks, onOpenLink }) => {
+export const TaskTable: React.FC<TaskTableProps> = ({ tasks, onOpenLink, settings }) => {
   const [collapsedIds, setCollapsedIds] = useState<Set<string>>(new Set());
 
   const handleToggle = (id: string) => {
@@ -238,6 +246,7 @@ export const TaskTable: React.FC<TaskTableProps> = ({ tasks, onOpenLink }) => {
                   onOpenLink={onOpenLink}
                   isCollapsed={collapsedIds.has(task.id)}
                   onToggle={handleToggle}
+                  settings={settings}
                 />
               ))}
             </React.Fragment>

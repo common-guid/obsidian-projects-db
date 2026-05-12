@@ -21459,6 +21459,7 @@ var require_client = __commonJS({
 // src/main.ts
 var main_exports = {};
 __export(main_exports, {
+  DEFAULT_SETTINGS: () => DEFAULT_SETTINGS,
   ExampleViewType: () => ExampleViewType,
   TaskBasesView: () => TaskBasesView,
   default: () => TaskManagerPlugin
@@ -21614,7 +21615,7 @@ var Chevron = ({ isCollapsed, onClick }) => /* @__PURE__ */ import_react.default
   )
 );
 var TagPill = ({ tag }) => /* @__PURE__ */ import_react.default.createElement("span", { className: "tm-tag-pill" }, tag);
-var TaskRow = import_react.default.memo(({ task, onOpenLink, isCollapsed, onToggle }) => {
+var TaskRow = import_react.default.memo(({ task, onOpenLink, isCollapsed, onToggle, settings }) => {
   const handleLinkClick = (file, heading) => {
     if (onOpenLink) {
       onOpenLink(file, heading);
@@ -21661,7 +21662,11 @@ var TaskRow = import_react.default.memo(({ task, onOpenLink, isCollapsed, onTogg
       {
         key: i,
         className: "tm-indent-guide",
-        style: { left: `${i * 20 + 8}px` }
+        style: {
+          left: `${i * 20 + 8}px`,
+          backgroundColor: (settings == null ? void 0 : settings.levelColors[i]) || "var(--background-modifier-border)",
+          width: "4px"
+        }
       }
     )), /* @__PURE__ */ import_react.default.createElement("div", { className: "tm-title-row" }, task.hasChildren && /* @__PURE__ */ import_react.default.createElement(Chevron, { isCollapsed, onClick: (e) => {
       e.stopPropagation();
@@ -21669,7 +21674,7 @@ var TaskRow = import_react.default.memo(({ task, onOpenLink, isCollapsed, onTogg
     } }), isTask && (isChecked ? /* @__PURE__ */ import_react.default.createElement(CheckSquareIcon, null) : /* @__PURE__ */ import_react.default.createElement(SquareIcon, null)), /* @__PURE__ */ import_react.default.createElement("span", { className: "tm-level-pill", style: getHeadingStyle(task.level) }, displayText)), task.tags.length > 0 && /* @__PURE__ */ import_react.default.createElement("div", { className: "tm-tag-container" }, task.tags.map((tag, idx) => /* @__PURE__ */ import_react.default.createElement(TagPill, { key: idx, tag }))))
   ));
 });
-var TaskTable = ({ tasks, onOpenLink }) => {
+var TaskTable = ({ tasks, onOpenLink, settings }) => {
   const [collapsedIds, setCollapsedIds] = (0, import_react.useState)(/* @__PURE__ */ new Set());
   const handleToggle = (id) => {
     setCollapsedIds((prev) => {
@@ -21712,27 +21717,50 @@ var TaskTable = ({ tasks, onOpenLink }) => {
       task,
       onOpenLink,
       isCollapsed: collapsedIds.has(task.id),
-      onToggle: handleToggle
+      onToggle: handleToggle,
+      settings
     }
   )))))));
 };
 
 // src/main.ts
 var ExampleViewType = "task-table";
+var DEFAULT_SETTINGS = {
+  levelColors: [
+    "#70e0af",
+    // Level 1 - Tealish
+    "#70a1e0",
+    // Level 2 - Bluish
+    "#e0d270",
+    // Level 3 - Yellowish
+    "#e070af",
+    // Level 4 - Pinkish
+    "#e0e0e0",
+    // Level 5 - Whitish
+    "#e0a170"
+    // Level 6 - Orangish
+  ]
+};
 var TaskManagerPlugin = class extends import_obsidian.Plugin {
+  constructor() {
+    super(...arguments);
+    __publicField(this, "settings");
+  }
   async onload() {
     console.log("Task Manager Plugin loading...");
+    await this.loadSettings();
     const registered = this.registerBasesView(ExampleViewType, {
       name: "Task Table",
       icon: "lucide-table",
       factory: (controller, containerEl) => {
-        return new TaskBasesView(controller, containerEl);
+        return new TaskBasesView(controller, containerEl, this);
       }
     });
     if (!registered) {
       console.warn("Task Manager: registerBasesView returned false \u2014 Bases may not be enabled in this vault.");
       return;
     }
+    this.addSettingTab(new TaskManagerSettingTab(this.app, this));
     console.log("Task Table view registered successfully.");
     this.app.workspace.onLayoutReady(() => {
       this.app.workspace.getLeavesOfType("bases").forEach((leaf) => {
@@ -21740,13 +21768,45 @@ var TaskManagerPlugin = class extends import_obsidian.Plugin {
       });
     });
   }
+  async loadSettings() {
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+  }
+  async saveSettings() {
+    await this.saveData(this.settings);
+    this.app.workspace.getLeavesOfType("bases").forEach((leaf) => {
+      if (leaf.view instanceof TaskBasesView) {
+        leaf.view.onDataUpdated();
+      }
+    });
+  }
+};
+var TaskManagerSettingTab = class extends import_obsidian.PluginSettingTab {
+  constructor(app, plugin) {
+    super(app, plugin);
+    __publicField(this, "plugin");
+    this.plugin = plugin;
+  }
+  display() {
+    const { containerEl } = this;
+    containerEl.empty();
+    containerEl.createEl("h2", { text: "Task Manager Settings" });
+    containerEl.createEl("h3", { text: "Hierarchy Colors" });
+    this.plugin.settings.levelColors.forEach((color, index) => {
+      new import_obsidian.Setting(containerEl).setName(`Level ${index + 1} Color`).setDesc(`Color for the vertical bar at hierarchy level ${index + 1}`).addColorPicker((colorPicker) => colorPicker.setValue(color).onChange(async (value) => {
+        this.plugin.settings.levelColors[index] = value;
+        await this.plugin.saveSettings();
+      }));
+    });
+  }
 };
 var TaskBasesView = class extends import_obsidian.BasesView {
-  constructor(controller, parentEl) {
+  constructor(controller, parentEl, plugin) {
     super(controller);
     __publicField(this, "type", ExampleViewType);
     __publicField(this, "containerEl");
     __publicField(this, "root", null);
+    __publicField(this, "plugin");
+    this.plugin = plugin;
     this.containerEl = parentEl.createDiv("task-manager-view-container");
   }
   onDataUpdated() {
@@ -21762,7 +21822,8 @@ var TaskBasesView = class extends import_obsidian.BasesView {
     this.root.render(
       import_react2.default.createElement(TaskTable, {
         tasks: flattenedTasks,
-        onOpenLink: handleOpenLink
+        onOpenLink: handleOpenLink,
+        settings: this.plugin.settings
       })
     );
   }

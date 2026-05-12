@@ -9,3 +9,6 @@ test-vault/
 # project specific
 obsidian-dev-docs
 .obsidian-bin
+manifest.json
+styles.css
+tmp/Screenshot_2026-05-12_07-09-09.png
