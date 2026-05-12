@@ -29,8 +29,17 @@ export interface HeadingTask {
 
 export interface TaskManagerSettings {
   tagColors: Record<string, string>;
+  levelColors: string[];
 }
 
 export const DEFAULT_SETTINGS: TaskManagerSettings = {
-  tagColors: {}
+  tagColors: {},
+  levelColors: [
+    '#70e0af', // Level 1 - Tealish
+    '#70a1e0', // Level 2 - Bluish
+    '#e0d270', // Level 3 - Yellowish
+    '#e070af', // Level 4 - Pinkish
+    '#e0e0e0', // Level 5 - Whitish
+    '#e0a170', // Level 6 - Orangish
+  ]
 };

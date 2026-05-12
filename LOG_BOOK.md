@@ -18,10 +18,20 @@ Refined the Tree Table UI by moving the hierarchical toggle from the heading cel
 
 ## Fix: Styling Conflicts and Icon Sizing | 2026-03-25
 Resolved issues where Obsidian themes or other plugins (like "Bases") were causing styling conflicts, leading to giant icons and unintended UI elements. Switched to unique `tm-` prefixed class names for all components to prevent namespace collisions. Implemented inline styles for SVG icon and button dimensions to ensure a consistent 16x16px footprint that overrides global theme CSS. Updated `styles.css` with higher-specificity rules and `!important` flags for critical layout properties. These changes ensure the Notion-style UI remains stable regardless of the user's active theme or environment.
-
 ## Visual Verification | 2026-05-07
 Screenshot captured: `/app/tests/interface_images/immediate-functional-gains.png`
 
-
 ## Immediate Functional Gains | 2026-05-07
 Implemented sticky file headers, breadcrumb tooltips on hover using full parent hierarchy, and quick actions (Open/Copy Link) on hover for TaskTable rows.
+
+## Visual Verification | 2026-05-10
+Screenshot captured: `/app/tests/interface_images/obsidian-capture-20260510-183347.png`
+
+## Colored Hierarchy Bars | 2026-05-12
+Replaced the 1px vertical indentation guides with thicker (4px), colored bars to improve visual grouping of sub-tasks, as requested. 
+- Implemented a configurable color palette for heading levels 1-6 in the plugin settings.
+- Added `TaskManagerSettings` interface and `TaskManagerSettingTab` to allow users to customize colors via a color picker.
+- Updated `TaskTable` and `TaskRow` components to accept settings and apply the configured colors to the `tm-indent-guide` elements.
+- Refined `styles.css` to support the wider, rounded bars while maintaining layout alignment.
+- Verified that all unit tests pass, including new mocks for the settings system.
+- Note: Automated visual verification via `capture-obsidian.sh` could not be completed in this environment due to missing GUI libraries (`libgobject-2.0.so.0`) and tools (`wmctrl`, `scrot`). Manual verification in Obsidian is recommended.

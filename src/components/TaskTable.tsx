@@ -6,6 +6,9 @@ interface TaskTableProps {
   onOpenLink?: (file: string, heading: string) => void;
   onTagContextMenu?: (tag: string, event: React.MouseEvent) => void;
   tagColors?: Record<string, string>;
+  settings?: {
+    levelColors: string[];
+  };
 }
 
 // Inline Lucide-style icons
@@ -65,6 +68,44 @@ const CopyIcon: React.FC = () => (
   </svg>
 );
 
+
+// Inline Lucide-style square SVG icon
+const SquareIcon: React.FC = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    className="tm-square-icon"
+    style={{ width: '16px', height: '16px', minWidth: '16px', flexShrink: 0, marginRight: '4px' }}
+  >
+    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+  </svg>
+);
+
+// Inline Lucide-style check-square SVG icon
+const CheckSquareIcon: React.FC = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    className="tm-check-square-icon"
+    style={{ width: '16px', height: '16px', minWidth: '16px', flexShrink: 0, marginRight: '4px', color: 'var(--text-accent)' }}
+  >
+    <polyline points="9 11 12 14 22 4" />
+    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+  </svg>
+);
+
 const Chevron: React.FC<{ isCollapsed: boolean, onClick: (e: React.MouseEvent) => void }> = ({ isCollapsed, onClick }) => (
   <button 
     className="tm-toggle" 
@@ -95,6 +136,7 @@ const stringToColor = (str: string) => {
   const h = Math.abs(hash) % 360;
   return `hsla(${h}, 70%, 40%, 0.15)`;
 };
+
 
 const hexToRgba = (hex: string, alpha: number) => {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -152,19 +194,21 @@ const TagPill: React.FC<{ tag: string, onContextMenu?: (tag: string, event: Reac
   );
 };
 
-const TaskRow = React.memo(({ task, onOpenLink, isCollapsed, onToggle, onTagContextMenu, tagColors }: { 
+const TaskRow = React.memo(({ task, onOpenLink, isCollapsed, onToggle, onTagContextMenu, tagColors, settings }: { 
   task: HeadingTask, 
   onOpenLink?: (file: string, heading: string) => void,
   isCollapsed: boolean,
   onToggle: (id: string) => void,
   onTagContextMenu?: (tag: string, event: React.MouseEvent) => void,
-  tagColors?: Record<string, string>
+  tagColors?: Record<string, string>,
+  settings?: { levelColors: string[] }
 }) => {
   const handleLinkClick = (file: string, heading: string) => {
     if (onOpenLink) {
       onOpenLink(file, heading);
     }
   };
+
 
   const indentation = (task.level - 1) * 20;
   
@@ -190,6 +234,20 @@ const TaskRow = React.memo(({ task, onOpenLink, isCollapsed, onToggle, onTagCont
     }
   };
 
+  // Detect and strip task syntax
+  let isTask = false;
+  let isChecked = false;
+  let displayText = task.text || '';
+
+  if (displayText.startsWith('- [ ] ')) {
+    isTask = true;
+    displayText = displayText.substring(6);
+  } else if (displayText.startsWith('- [x] ') || displayText.startsWith('- [X] ')) {
+    isTask = true;
+    isChecked = true;
+    displayText = displayText.substring(6);
+  }
+
   return (
     <tr className="tm-row" title={breadcrumb}>
       <td
@@ -197,6 +255,18 @@ const TaskRow = React.memo(({ task, onOpenLink, isCollapsed, onToggle, onTagCont
         onClick={() => handleLinkClick(task.file, task.text || '')}
       >
         <div className="tm-cell-content" style={{ paddingLeft: `${indentation}px` }}>
+          {/* Render indentation guides based on level */}
+          {Array.from({ length: task.level - 1 }).map((_, i) => (
+            <div
+              key={i}
+              className="tm-indent-guide"
+              style={{ 
+                left: `${i * 20 + 8}px`,
+                backgroundColor: settings?.levelColors[i] || 'var(--background-modifier-border)',
+                width: '4px'
+              }}
+            />
+          ))}
           <div className="tm-title-row">
             {task.hasChildren && (
               <Chevron isCollapsed={isCollapsed} onClick={(e) => {
@@ -204,8 +274,9 @@ const TaskRow = React.memo(({ task, onOpenLink, isCollapsed, onToggle, onTagCont
                 onToggle(task.id);
               }} />
             )}
+            {isTask && (isChecked ? <CheckSquareIcon /> : <SquareIcon />)}
             <span className="tm-level-pill" style={getHeadingStyle(task.level)}>
-              {task.text}
+              {displayText}
             </span>
             <div className="tm-actions-container">
               <button
@@ -249,7 +320,7 @@ const TaskRow = React.memo(({ task, onOpenLink, isCollapsed, onToggle, onTagCont
   );
 });
 
-export const TaskTable: React.FC<TaskTableProps> = ({ tasks, onOpenLink, onTagContextMenu, tagColors }) => {
+export const TaskTable: React.FC<TaskTableProps> = ({ tasks, onOpenLink, onTagContextMenu, tagColors, settings }) => {
   const [collapsedIds, setCollapsedIds] = useState<Set<string>>(new Set());
 
   const handleToggle = (id: string) => {
@@ -316,6 +387,7 @@ export const TaskTable: React.FC<TaskTableProps> = ({ tasks, onOpenLink, onTagCo
                   onToggle={handleToggle}
                   onTagContextMenu={onTagContextMenu}
                   tagColors={tagColors}
+                  settings={settings}
                 />
               ))}
             </React.Fragment>

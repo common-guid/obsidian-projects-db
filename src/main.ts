@@ -1,4 +1,4 @@
-import { Plugin, BasesView, Menu, ColorComponent, Modal } from 'obsidian';
+import { Plugin, BasesView, Menu, ColorComponent, Modal, PluginSettingTab, Setting } from 'obsidian';
 import React from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { mapHeadingsToTasks } from './mapper';
@@ -7,9 +7,8 @@ import { TaskTable } from './components/TaskTable';
 
 export const ExampleViewType = 'task-table';
 
-export class TaskManagerPlugin extends Plugin {
+export default class TaskManagerPlugin extends Plugin {
   settings: TaskManagerSettings;
-
   async onload() {
     console.log('Task Manager Plugin loading...');
 
@@ -28,6 +27,8 @@ export class TaskManagerPlugin extends Plugin {
       return;
     }
 
+    this.addSettingTab(new TaskManagerSettingTab(this.app, this));
+
     console.log('Task Table view registered successfully.');
 
     this.app.workspace.onLayoutReady(() => {
@@ -36,7 +37,6 @@ export class TaskManagerPlugin extends Plugin {
       });
     });
   }
-
   async loadSettings() {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
   }
@@ -51,10 +51,6 @@ export class TaskManagerPlugin extends Plugin {
     });
   }
 }
-
-// Ensure Obsidian can load the plugin (Obsidian expects a default export)
-// We follow the Law by using named exports primarily, but provide this for platform compatibility.
-export default TaskManagerPlugin;
 
 class TagColorModal extends Modal {
   tag: string;
@@ -90,6 +86,37 @@ class TagColorModal extends Modal {
   onClose() {
     const { contentEl } = this;
     contentEl.empty();
+  }
+}
+
+class TaskManagerSettingTab extends PluginSettingTab {
+  plugin: TaskManagerPlugin;
+
+  constructor(app: any, plugin: TaskManagerPlugin) {
+    super(app, plugin);
+    this.plugin = plugin;
+  }
+
+  display(): void {
+    const { containerEl } = this;
+
+    containerEl.empty();
+
+    containerEl.createEl('h2', { text: 'Task Manager Settings' });
+
+    containerEl.createEl('h3', { text: 'Hierarchy Colors' });
+    
+    this.plugin.settings.levelColors.forEach((color, index) => {
+      new Setting(containerEl)
+        .setName(`Level ${index + 1} Color`)
+        .setDesc(`Color for the vertical bar at hierarchy level ${index + 1}`)
+        .addColorPicker(colorPicker => colorPicker
+          .setValue(color)
+          .onChange(async (value) => {
+            this.plugin.settings.levelColors[index] = value;
+            await this.plugin.saveSettings();
+          }));
+    });
   }
 }
 
@@ -138,7 +165,8 @@ export class TaskBasesView extends BasesView {
         tasks: flattenedTasks,
         onOpenLink: handleOpenLink,
         onTagContextMenu: handleTagContextMenu,
-        tagColors: { ...this.plugin.settings.tagColors }
+        tagColors: { ...this.plugin.settings.tagColors },
+        settings: this.plugin.settings
       })
     );
   }
