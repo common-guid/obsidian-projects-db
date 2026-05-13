@@ -35,23 +35,6 @@ const FlagIcon: React.FC = () => (
   </svg>
 );
 
-const OpenIcon: React.FC = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    style={{ width: '14px', height: '14px' }}
-  >
-    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-    <polyline points="15 3 21 3 21 9" />
-    <line x1="10" y1="14" x2="21" y2="3" />
-  </svg>
-);
-
 const CopyIcon: React.FC = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +44,7 @@ const CopyIcon: React.FC = () => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
-    style={{ width: '14px', height: '14px' }}
+    style={{ width: '7px', height: '7px' }}
   >
     <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
@@ -281,17 +264,18 @@ const TaskRow = React.memo(({ task, onOpenLink, isCollapsed, onToggle, onTagCont
             <div className="tm-actions-container">
               <button
                 className="tm-action-btn"
-                title="Open"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleLinkClick(task.file, task.text || '');
-                }}
-              >
-                <OpenIcon />
-              </button>
-              <button
-                className="tm-action-btn"
                 title="Copy Link"
+                style={{ 
+                  width: '10px', 
+                  height: '10px', 
+                  minWidth: '10px', 
+                  minHeight: '10px', 
+                  padding: 0, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  borderRadius: '2px'
+                }}
                 onClick={(e) => {
                   e.stopPropagation();
                   const linkText = `[[${task.file}#${task.text}]]`;
@@ -374,7 +358,7 @@ export const TaskTable: React.FC<TaskTableProps> = ({ tasks, onOpenLink, onTagCo
                 <td className="tm-file-header-cell">
                   <div className="tm-file-icon-wrapper">
                     <FileIcon />
-                    <span className="tm-file-name">{group.file}</span>
+                    <span className="tm-file-name" style={{ fontSize: 'var(--h1-size, 2em)', fontWeight: 'bold' }}>{group.file}</span>
                   </div>
                 </td>
               </tr>
