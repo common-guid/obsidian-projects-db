@@ -35,3 +35,12 @@ Replaced the 1px vertical indentation guides with thicker (4px), colored bars to
 - Refined `styles.css` to support the wider, rounded bars while maintaining layout alignment.
 - Verified that all unit tests pass, including new mocks for the settings system.
 - Note: Automated visual verification via `capture-obsidian.sh` could not be completed in this environment due to missing GUI libraries (`libgobject-2.0.so.0`) and tools (`wmctrl`, `scrot`). Manual verification in Obsidian is recommended.
+
+## UI Refinement & Roadmap Creation | 2026-05-12
+Implemented several quality-of-life UI updates to `TaskTable.tsx` and established a long-term project roadmap.
+- **Removed redundant 'Open' button**: Deleted the separate open action button since clicking the row title already provides the same functionality, decluttering the action container.
+- **Resized 'Copy Link' button**: Reduced the overall footprint of the link button (icon and container) to 10px with a 7px icon to minimize visual noise.
+- **Enhanced File Headers**: Increased the file name font size to 2em (H1 size) with bold weight to improve visual hierarchy while maintaining the distinct grey background.
+- **Project Roadmap**: Conducted a deep dive into project intent and established a `Roadmap.md` (in `conductor/`) outlining immediate functional gains (interactive checkboxes, inline editing) and strategic big ideas (Kanban views, timeline visualization).
+- Verified changes via successful `npm run build` and manual inspection of the component code.
+
