@@ -4,3 +4,4 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [Visual Depth and Obsidian-Native Feel](./tracks/obsidian-native-feel/index.md)
 - [Immediate Functional Gains](./tracks/immediate-functional-gains/index.md)
+- [Table Dashboard Interface](./tracks/table-dashboard-interface/index.md)
